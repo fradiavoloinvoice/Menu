@@ -1,677 +1,465 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fradiavolo - Menu</title>
-  <meta name="description" content="Guarda il nostro menù e scegli la pizza che più fa per te!">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'fra-red': '#C41E3A',
-            'fra-yellow': '#FFD700',
-            'fra-cream': '#FFF8DC',
-            'fra-black': '#1a1a1a',
-            'fra-pepperwhite': '#F5F5F5'
-          },
-          fontFamily: {
-            'roc': ['Roboto Condensed', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    body { font-family: 'Roboto Condensed', sans-serif; }
-    .big-shadow { text-shadow: 3px 3px 0px rgba(0,0,0,0.3); }
-    .category-btn.active { transform: scale(1.05); }
-    .modal-overlay {
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(4px);
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    .modal-content {
-      animation: fadeIn 0.3s ease-out;
-    }
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    .animate-marquee {
-      animation: marquee 15s linear infinite;
-      display: inline-block;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Fradiavolo | Pizza Contemporanea</title>
+    <meta name="description" content="Scopri il menu Fradiavolo: pizze tradizionali, diavole piccanti, pop creative, pasta e fritti. Pizza contemporanea con ingredienti DOP.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .section-tab { transition: all 0.2s ease; }
+        .section-tab.active { background-color: #dc2626; color: white; }
+        .section-tab:not(.active):hover { background-color: #fef3c7; }
+        .subcategory-tab { transition: all 0.2s ease; }
+        .subcategory-tab.active { background-color: #fbbf24; color: #1f2937; font-weight: 600; }
+        .subcategory-tab:not(.active):hover { background-color: #fef3c7; }
+        .menu-section { display: none; }
+        .menu-section.active { display: block; }
+        .pizza-subsection { display: none; }
+        .pizza-subsection.active { display: block; }
+        .menu-item { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .menu-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    </style>
 </head>
-<body class="bg-fra-cream">
+<body class="bg-amber-50">
+    <!-- Header -->
+    <header class="bg-red-600 text-white py-8 text-center border-b-4 border-black">
+        <h1 class="text-5xl font-bold uppercase tracking-wide">Menu Fradiavolo</h1>
+        <p class="text-xl mt-2 opacity-90">Pizza Contemporanea</p>
+    </header>
 
-  <!-- Language Popup Modal -->
-  <div id="langModal" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay">
-    <div class="modal-content bg-fra-cream border-4 border-black p-8 max-w-md w-full mx-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-      <h2 class="text-3xl md:text-4xl font-bold text-fra-red uppercase text-center mb-6 big-shadow">
-        Scegli la lingua / Choose language
-      </h2>
-      <div class="grid grid-cols-2 gap-4">
-        <button onclick="selectLanguage('it')" class="flex items-center justify-center gap-3 bg-fra-pepperwhite border-2 border-black p-4 hover:bg-fra-yellow transition-all">
-          <span class="text-3xl">🇮🇹</span>
-          <span class="text-xl font-bold uppercase">Italiano</span>
-        </button>
-        <button onclick="selectLanguage('en')" class="flex items-center justify-center gap-3 bg-fra-pepperwhite border-2 border-black p-4 hover:bg-fra-yellow transition-all">
-          <span class="text-3xl">🇺🇸</span>
-          <span class="text-xl font-bold uppercase">English</span>
-        </button>
-        <button onclick="selectLanguage('es')" class="flex items-center justify-center gap-3 bg-fra-pepperwhite border-2 border-black p-4 hover:bg-fra-yellow transition-all">
-          <span class="text-3xl">🇪🇸</span>
-          <span class="text-xl font-bold uppercase">Español</span>
-        </button>
-        <button onclick="selectLanguage('fr')" class="flex items-center justify-center gap-3 bg-fra-pepperwhite border-2 border-black p-4 hover:bg-fra-yellow transition-all">
-          <span class="text-3xl">🇫🇷</span>
-          <span class="text-xl font-bold uppercase">Français</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Header with Language Selector -->
-  <header class="bg-fra-red border-b-2 border-black p-4 flex justify-between items-center">
-    <h1 class="text-2xl md:text-3xl font-bold text-fra-yellow uppercase">Fradiavolo</h1>
-    <button onclick="openLangModal()" id="langBtn" class="flex items-center gap-2 bg-fra-yellow border-2 border-black px-4 py-2 hover:bg-white transition-all">
-      <span id="currentFlag" class="text-xl">🇮🇹</span>
-      <span id="currentLang" class="font-bold uppercase">IT</span>
-    </button>
-  </header>
-
-  <!-- Hero -->
-  <section class="h-[40vh] border-b-2 border-black bg-cover bg-center flex flex-col justify-center items-center" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url('https://fradiavolopizzeria.com/img/head-menu2.jpg');">
-    <h1 id="heroTitle" class="text-5xl md:text-7xl font-bold text-fra-cream big-shadow uppercase tracking-tight text-center px-4">IL NOSTRO MENU</h1>
-    <p id="heroSubtitle" class="text-lg md:text-xl text-fra-cream text-center px-4 uppercase mt-4">
-      Impasto fatto in Italia. Pizza assemblata con amore.
-    </p>
-  </section>
-
-  <!-- Marquee -->
-  <div class="bg-fra-cream border-b-2 border-black py-3 overflow-hidden">
-    <div class="whitespace-nowrap animate-marquee text-4xl font-bold uppercase text-black">
-      <span class="mx-8">EAT PIZZA MAKE LOVE</span>
-      <span class="mx-8">EAT PIZZA MAKE LOVE</span>
-      <span class="mx-8">EAT PIZZA MAKE LOVE</span>
-      <span class="mx-8">EAT PIZZA MAKE LOVE</span>
-    </div>
-  </div>
-
-  <!-- Category Tabs -->
-  <div class="sticky top-0 z-40 bg-fra-red border-b-2 border-black">
-    <div class="overflow-x-auto">
-      <div class="flex gap-2 md:gap-4 p-4 md:p-6 min-w-max md:min-w-0 md:justify-center" id="categoryTabs">
-      </div>
-    </div>
-  </div>
-
-  <!-- Menu Content -->
-  <section class="bg-fra-cream border-b-2 border-black px-4 md:px-10 py-10">
-    <h2 id="categoryTitle" class="text-4xl md:text-5xl lg:text-6xl font-bold text-fra-red uppercase mb-8 big-shadow"></h2>
-    <div id="menuGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-fra-red border-t-2 border-black py-8 text-center">
-    <p class="text-fra-cream text-xl uppercase">Fradiavolo Pizzeria</p>
-    <p class="text-fra-yellow mt-2">Eat Pizza. Make Love.</p>
-  </footer>
-
-  <script>
-    // Translations
-    const translations = {
-      it: {
-        heroTitle: "IL NOSTRO MENU",
-        heroSubtitle: "Il nostro menu cambia e si aggiorna sempre: scegli tra cinque impasti diversi, pizze classiche e sempre nuove.",
-        flag: "🇮🇹",
-        code: "IT"
-      },
-      en: {
-        heroTitle: "OUR MENU",
-        heroSubtitle: "Our menu is always changing and evolving: choose from five different doughs, classic and always new pizzas.",
-        flag: "🇺🇸",
-        code: "EN"
-      },
-      es: {
-        heroTitle: "NUESTRO MENÚ",
-        heroSubtitle: "Nuestro menú cambia y se actualiza siempre: elige entre cinco masas diferentes, pizzas clásicas y siempre nuevas.",
-        flag: "🇪🇸",
-        code: "ES"
-      },
-      fr: {
-        heroTitle: "NOTRE MENU",
-        heroSubtitle: "Notre menu change et évolue toujours: choisissez parmi cinq pâtes différentes, des pizzas classiques et toujours nouvelles.",
-        flag: "🇫🇷",
-        code: "FR"
-      }
-    };
-
-    // Menu Data (all languages)
-    const menuData = {
-      it: [
-        {
-          title: "Impasti",
-          emoji: "🫓",
-          content: [
-            { id: "classico", title: "Classico", subtitle: "Un impasto di farina di grano tenero per una pizza molto profumata e saporita.", emoji: "🫓" },
-            { id: "sottile", title: "Sottile", subtitle: "Con farina di grano tenero per una pizza leggera, scrocchiarella, dal bordo basso e sottile.", emoji: "🫓" },
-            { id: "nero", title: "Nero", subtitle: "Il sorprendente impasto con carbone vegetale che regala una pizza leggera e digeribile.", emoji: "🫓" },
-            { id: "integrale", title: "Integrale", subtitle: "Un impasto di farina integrale per una pizza molto profumata e saporita.", emoji: "🫓" },
-            { id: "senza-frumento", title: "Senza frumento", subtitle: "Impasto leggero, a base di farine naturalmente prive di glutine. Non adatto ai celiaci in quanto soggetto a contaminazione incrociata in fase di cottura.", emoji: "🫓" }
-          ]
-        },
-        {
-          title: "Tradizionali",
-          emoji: "🍕",
-          content: [
-            { id: "margherita", title: "Margherita", subtitle: "Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Basilico", emoji: "🍕" },
-            { id: "margherita-piu", title: "Margherita più", subtitle: "Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Parmigiano Reggiano DOP, Basilico", emoji: "🍕" },
-            { id: "margherita-doppia", title: "Margherita doppia mozzarella", subtitle: "Pomodoro La Concettina, doppio Fiordilatte dei Monti Lattari, Basilico", emoji: "🍕" },
-            { id: "bufala", title: "Bufala", subtitle: "Pomodoro La Concettina, Mozzarella di Latte di Bufala La Cilentana, Pepe Macinato, Basilico, Olio EVO", emoji: "🍕" },
-            { id: "marinara", title: "Marinara", subtitle: "Pomodoro La Concettina, Aglio, Origano, Basilico", emoji: "🍕" },
-            { id: "napoli", title: "Napoli", subtitle: "Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Alici di Cetara, Basilico", emoji: "🍕" },
-            { id: "prosciutto-cotto", title: "Prosciutto cotto", subtitle: "Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Cotto Raspini, Provolone del Monaco, Basilico", emoji: "🍕" },
-            { id: "crostino-cotto", title: "Crostino cotto", subtitle: "Fiordilatte dei Monti Lattari, Prosciutto Cotto Raspini, Olio EVO, Basilico", emoji: "🍕" },
-            { id: "ortolana", title: "Ortolana", subtitle: "Fiordilatte dei Monti Lattari, Stracciatella Affumicata, Crema di peperoni al forno, Melanzane fritte, Pomodori secchi, Basilico", emoji: "🍕" },
-            { id: "prosciutto-crudo", title: "Prosciutto crudo", subtitle: "Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Prosciutto Crudo di Parma, Basilico", emoji: "🍕" },
-            { id: "salsiccia-friarielli", title: "Salsiccia e friarielli", subtitle: "Fiordilatte dei Monti Lattari, Salsiccia Fresca, Friarielli, Basilico", emoji: "🍕" },
-            { id: "capricciosa", title: "Capricciosa", subtitle: "Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Prosciutto Cotto Raspini, Carciofi, Funghi, Olive, Basilico", emoji: "🍕" }
-          ]
-        },
-        {
-          title: "Diavole",
-          emoji: "🌶️",
-          content: [
-            { id: "fradiavolo", title: "Fradiavolo", subtitle: "Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Spianata Piccante Raspini ricetta Fradiavolo, Parmigiano Reggiano DOP, Basilico", emoji: "🌶️", featured: true },
-            { id: "pepperoni", title: "Pepperoni", subtitle: "Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Salamino Piccante La Granda, Miele d'Acacia Piccante, Basilico", emoji: "🌶️" },
-            { id: "fradiavolissima", title: "Fradiavolissima", subtitle: "Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Spianata Piccante Raspini ricetta Fradiavolo, Salamino Piccante La Granda, 'Nduja di Spilinga, Basilico", emoji: "🌶️", featured: true }
-          ]
-        },
-        {
-          title: "Pop",
-          emoji: "✨",
-          content: [
-            { id: "li-mortazza-tua", title: "Li mortazza tua", subtitle: "Fiordilatte dei Monti Lattari, Mortadella Bologna IGP Raspini, Stracciatella, Pesto di pistacchio, Granella di Pistacchio", emoji: "✨", featured: true },
-            { id: "gorgo-roll", title: "Gorgo 'n' Roll", subtitle: "Fiordilatte dei Monti Lattari, Salsiccia Fresca, Gorgonzola DOP, Basilico", emoji: "✨" },
-            { id: "mr-bean", title: "Mr. Bean", subtitle: "Pomodoro La Concettina, Salsiccia Fresca, Cipolla Rossa Caramellata, Fagioli Borlotti e Cannellini, Stracciatella Affumicata, Olio all'aglio, Pepe Nero, Basilico", emoji: "✨", featured: true },
-            { id: "stranger-chips", title: "Stranger Chips", subtitle: "Pomodoro La Concettina, Capperi, Olio EVO, Maionese alla Senape, Chips di Patate, Pepe Nero Macinato", emoji: "✨" },
-            { id: "porcino-contento", title: "Porcino e contento", subtitle: "Fiordilatte, Funghi misti, Fungo Porcino sott'olio, Polvere di Fungo Porcino, Basilico", emoji: "✨" },
-            { id: "mr-wurstel", title: "Mr. Wurstel", subtitle: "Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Wurstel di Carne di bovino Presidio Slow Food e suino, Basilico", emoji: "✨" },
-            { id: "torna-pesto", title: "Torna pesto", subtitle: "Fiordilatte dei Monti Lattari, Prosciutto Cotto Raspini, Patate al Forno, Gocce di Pesto di Pra', Basilico", emoji: "✨" },
-            { id: "polpette-gogo", title: "Polpette a go gò", subtitle: "Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Parmigiano Reggiano DOP, Polpette di Carne di bovino Presidio Slow Food e suino, Basilico", emoji: "✨" },
-            { id: "fata-zucchina", title: "Fata Zucchina", subtitle: "Fiordilatte dei Monti Lattari, Crema di Zucchine Fresche e Menta, Zucchine Fritte, Provolone del Monaco DOP, Pepe Macinato, Basilico", emoji: "✨" },
-            { id: "carciofunky", title: "Carciofunky", subtitle: "Crema di carciofi, Fiordilatte dei Monti Lattari, Salsiccia Fresca, Rucola, Olive", emoji: "✨" }
-          ]
-        },
-        {
-          title: "Pasta",
-          emoji: "🍝",
-          content: [
-            { id: "carbonara", title: "Carbonara", subtitle: "Mezze maniche, uova, pecorino romano, guanciale croccante, pepe nero", emoji: "🍝" },
-            { id: "amatriciana", title: "Amatriciana", subtitle: "Mezze maniche, pomodoro, pecorino romano, guanciale croccante, pepe nero", emoji: "🍝" },
-            { id: "cacio-pepe", title: "Cacio e pepe", subtitle: "Tonnarelli, pecorino romano, pepe nero", emoji: "🍝" },
-            { id: "dolcevita", title: "Dolcevita", subtitle: "Mezze maniche, pomodoro, stracciatella, pesto di Prà", emoji: "🍝" },
-            { id: "ragu-bolognese", title: "Ragù alla bolognese", subtitle: "Mezze maniche al ragù alla bolognese", emoji: "🍝" }
-          ]
-        },
-        {
-          title: "Insalate e piattini",
-          emoji: "🥗",
-          content: [
-            { id: "kung-fu-pollo", title: "Kung fu pollo", subtitle: "Misticanza, Pollo Marinato in Salsa di Soia, Scaglie di Grana Padano DOP, Tarallo Mandorlato, Senape al Miele e Salsa Yogurt", emoji: "🥗" },
-            { id: "dillo-avocado", title: "Dillo all'avocado", subtitle: "Misticanza, Carciofi, Pomodori Datterini, Olive, Granella di Pistacchio, Avocado, Olio EVO", emoji: "🥗" },
-            { id: "myss-feta", title: "Myss feta", subtitle: "Misticanza, Pomodorini Datterini, Tonno, Feta Greca DOP, Olive, Olio EVO", emoji: "🥗" },
-            { id: "zuppa-legumi", title: "Zuppa di legumi e cereali", subtitle: "con Salvia, Rosmarino e Olio EVO", emoji: "🥗" },
-            { id: "burrata-pomodorini", title: "Burrata e pomodorini", subtitle: "Burrata, Pomodorini Datterini, Misticanza, Pesto di Pra', Olio EVO", emoji: "🥗" },
-            { id: "crudo-bufala", title: "Crudo e bufala", subtitle: "Prosciutto Crudo di Parma, Mozzarella di Latte di Bufala La Cilentana, Misticanza, Pepe Macinato, Olio EVO", emoji: "🥗" }
-          ]
-        },
-        {
-          title: "Fritti",
-          emoji: "🍟",
-          content: [
-            { id: "patatine", title: "Patatine fritte", subtitle: "con salse a scelta", emoji: "🍟" },
-            { id: "suppli-telefono", title: "Supplì al telefono", subtitle: "Ragù e Mozzarella", emoji: "🍟" },
-            { id: "suppli-cacio-pepe", title: "Supplì cacio e pepe", subtitle: "Pecorino e Pepe", emoji: "🍟" },
-            { id: "crocchetta-patate", title: "Crocchetta di patate", subtitle: "Patate Rosse, Mozzarella, Prosciutto Cotto e Rosmarino", emoji: "🍟" },
-            { id: "crocchetta-mortadella", title: "Crocchetta mortadella e pistacchio", subtitle: "Mortadella Bologna IGP e Pesto di Pistacchio", emoji: "🍟" },
-            { id: "polpette-fritte", title: "Polpettine fritte", subtitle: "Polpette di carne di bovino Presidio Slow Food e suino", emoji: "🍟" },
-            { id: "panelle", title: "Panelle", subtitle: "con sale, pepe e limone", emoji: "🍟" }
-          ]
-        },
-        {
-          title: "Dolci",
-          emoji: "🍰",
-          content: [
-            { id: "tortino-cioccolato", title: "Tortino al cioccolato", subtitle: "", emoji: "🍫" },
-            { id: "pizza-nutella", title: "Pizza alla Nutella", subtitle: "con granella di pistacchio", emoji: "🍕" },
-            { id: "tiramisu", title: "Tiramisù", subtitle: "", emoji: "🍰" },
-            { id: "cheesecake", title: "Cheesecake", subtitle: "Toppings: Nutella, amarena o pistacchio", emoji: "🍰" },
-            { id: "gelato-fiordilatte", title: "Gelato al fiordilatte", subtitle: "Toppings: Nutella, amarena o pistacchio", emoji: "🍨" },
-            { id: "sorbetto-limone", title: "Sorbetto al limone", subtitle: "", emoji: "🍋" }
-          ]
-        }
-      ],
-      en: [
-        {
-          title: "Doughs",
-          emoji: "🫓",
-          content: [
-            { id: "classico", title: "Classic", subtitle: "A soft wheat flour dough for a very fragrant and tasty pizza.", emoji: "🫓" },
-            { id: "sottile", title: "Thin", subtitle: "Made with soft wheat flour for a light, crispy pizza with a low, thin edge.", emoji: "🫓" },
-            { id: "nero", title: "Black", subtitle: "The surprising dough with vegetable charcoal that delivers a light and digestible pizza.", emoji: "🫓" },
-            { id: "integrale", title: "Whole Wheat", subtitle: "A whole wheat flour dough for a very fragrant and tasty pizza.", emoji: "🫓" },
-            { id: "senza-frumento", title: "Wheat-Free", subtitle: "Light dough made with naturally gluten-free flours. Not suitable for celiacs as it may be subject to cross-contamination during cooking.", emoji: "🫓" }
-          ]
-        },
-        {
-          title: "Traditional",
-          emoji: "🍕",
-          content: [
-            { id: "margherita", title: "Margherita", subtitle: "La Concettina Tomato, Fiordilatte from Monti Lattari, Basil", emoji: "🍕" },
-            { id: "margherita-piu", title: "Margherita più", subtitle: "La Concettina Tomato, Fiordilatte from Monti Lattari, Parmigiano Reggiano DOP, Basil", emoji: "🍕" },
-            { id: "margherita-doppia", title: "Margherita doppia mozzarella", subtitle: "La Concettina Tomato, Double Fiordilatte from Monti Lattari, Basil", emoji: "🍕" },
-            { id: "bufala", title: "Bufala", subtitle: "La Concettina Tomato, La Cilentana Buffalo Mozzarella, Ground Pepper, Basil, Extra Virgin Olive Oil", emoji: "🍕" },
-            { id: "marinara", title: "Marinara", subtitle: "La Concettina Tomato, Garlic, Oregano, Basil", emoji: "🍕" },
-            { id: "napoli", title: "Napoli", subtitle: "La Concettina Tomato, Fiordilatte from Monti Lattari, Cetara Anchovies, Basil", emoji: "🍕" },
-            { id: "prosciutto-cotto", title: "Prosciutto cotto", subtitle: "La Concettina Tomato, Fiordilatte from Monti Lattari, Raspini Cooked Ham, Provolone del Monaco, Basil", emoji: "🍕" },
-            { id: "crostino-cotto", title: "Crostino cotto", subtitle: "Fiordilatte from Monti Lattari, Raspini Cooked Ham, Extra Virgin Olive Oil, Basil", emoji: "🍕" },
-            { id: "ortolana", title: "Ortolana", subtitle: "Fiordilatte from Monti Lattari, Smoked Stracciatella, Roasted Pepper Cream, Fried Eggplant, Sun-dried Tomatoes, Basil", emoji: "🍕" },
-            { id: "prosciutto-crudo", title: "Prosciutto crudo", subtitle: "La Concettina Tomato, Fiordilatte from Monti Lattari, Parma Prosciutto Crudo, Basil", emoji: "🍕" },
-            { id: "salsiccia-friarielli", title: "Salsiccia e friarielli", subtitle: "Fiordilatte from Monti Lattari, Fresh Sausage, Friarielli, Basil", emoji: "🍕" },
-            { id: "capricciosa", title: "Capricciosa", subtitle: "La Concettina Tomato, Fiordilatte from Monti Lattari, Raspini Cooked Ham, Artichokes, Mushrooms, Olives, Basil", emoji: "🍕" }
-          ]
-        },
-        {
-          title: "Spicy",
-          emoji: "🌶️",
-          content: [
-            { id: "fradiavolo", title: "Fradiavolo", subtitle: "La Concettina Tomato, Fiordilatte from Monti Lattari, Raspini Spicy Spianata Fradiavolo Recipe, Parmigiano Reggiano DOP, Basil", emoji: "🌶️", featured: true },
-            { id: "pepperoni", title: "Pepperoni", subtitle: "La Concettina Tomato, Fiordilatte from Monti Lattari, La Granda Spicy Salami, Spicy Acacia Honey, Basil", emoji: "🌶️" },
-            { id: "fradiavolissima", title: "Fradiavolissima", subtitle: "La Concettina Tomato, Fiordilatte from Monti Lattari, Raspini Spicy Spianata Fradiavolo Recipe, La Granda Spicy Salami, Nduja from Spilinga, Basil", emoji: "🌶️", featured: true }
-          ]
-        },
-        {
-          title: "Pop",
-          emoji: "✨",
-          content: [
-            { id: "li-mortazza-tua", title: "Li mortazza tua", subtitle: "Fiordilatte from Monti Lattari, Raspini Mortadella Bologna IGP, Stracciatella, Pistachio Pesto, Crushed Pistachios", emoji: "✨", featured: true },
-            { id: "gorgo-roll", title: "Gorgo 'n' Roll", subtitle: "Fiordilatte from Monti Lattari, Fresh Sausage, Gorgonzola DOP, Basil", emoji: "✨" },
-            { id: "mr-bean", title: "Mr. Bean", subtitle: "La Concettina Tomato, Fresh Sausage, Caramelized Red Onion, Borlotti Beans, Cannellini Beans, Smoked Stracciatella, Garlic Oil, Ground Black Pepper, Basil", emoji: "✨", featured: true },
-            { id: "stranger-chips", title: "Stranger Chips", subtitle: "La Concettina Tomato, Capers, Extra Virgin Olive Oil, Mustard Mayonnaise, Potato Chips, Ground Black Pepper", emoji: "✨" },
-            { id: "porcino-contento", title: "Porcino e contento", subtitle: "Fiordilatte, Mixed Mushrooms, Porcini Mushrooms in Oil, Porcini Mushroom Powder, Basil", emoji: "✨" },
-            { id: "mr-wurstel", title: "Mr. Wurstel", subtitle: "La Concettina Tomato, Fiordilatte from Monti Lattari, Sausages from Slow Food Presidium Beef and Pork, Basil", emoji: "✨" },
-            { id: "torna-pesto", title: "Torna pesto", subtitle: "Fiordilatte from Monti Lattari, Raspini Cooked Ham, Baked Potatoes, Pra' Pesto Drops, Basil", emoji: "✨" },
-            { id: "polpette-gogo", title: "Polpette a go gò", subtitle: "La Concettina Tomato, Fiordilatte from Monti Lattari, Parmigiano Reggiano DOP, Meatballs from Slow Food Presidium Beef and Pork, Basil", emoji: "✨" },
-            { id: "fata-zucchina", title: "Fata Zucchina", subtitle: "Fiordilatte from Monti Lattari, Fresh Zucchini and Mint Cream, Fried Zucchini, Provolone del Monaco DOP, Ground Pepper, Basil", emoji: "✨" },
-            { id: "carciofunky", title: "Carciofunky", subtitle: "Artichoke Cream, Fiordilatte from Monti Lattari, Fresh Sausage, Arugula, Olives", emoji: "✨" }
-          ]
-        },
-        {
-          title: "Pasta",
-          emoji: "🍝",
-          content: [
-            { id: "carbonara", title: "Carbonara", subtitle: "Mezze maniche, eggs, pecorino romano, crispy guanciale, black pepper", emoji: "🍝" },
-            { id: "amatriciana", title: "Amatriciana", subtitle: "Mezze maniche, tomato, pecorino romano, crispy guanciale, black pepper", emoji: "🍝" },
-            { id: "cacio-pepe", title: "Cacio e pepe", subtitle: "Tonnarelli, pecorino romano, black pepper", emoji: "🍝" },
-            { id: "dolcevita", title: "Dolcevita", subtitle: "Mezze maniche, tomato, stracciatella, Pra' pesto", emoji: "🍝" },
-            { id: "ragu-bolognese", title: "Ragù alla bolognese", subtitle: "Mezze maniche with bolognese ragù", emoji: "🍝" }
-          ]
-        },
-        {
-          title: "Salads and Small Plates",
-          emoji: "🥗",
-          content: [
-            { id: "kung-fu-pollo", title: "Kung fu pollo", subtitle: "Mixed Greens, Chicken Marinated in Soy Sauce, Grana Padano DOP Shavings, Almond Tarallo, Honey Mustard and Yogurt Sauce", emoji: "🥗" },
-            { id: "dillo-avocado", title: "Dillo all'avocado", subtitle: "Mixed Greens, Artichokes, Cherry Tomatoes, Olives, Crushed Pistachios, Avocado, Extra Virgin Olive Oil", emoji: "🥗" },
-            { id: "myss-feta", title: "Myss feta", subtitle: "Mixed Greens, Cherry Tomatoes, Tuna, Greek Feta DOP, Olives, Extra Virgin Olive Oil", emoji: "🥗" },
-            { id: "zuppa-legumi", title: "Legume and Cereal Soup", subtitle: "with Sage, Rosemary and Extra Virgin Olive Oil", emoji: "🥗" },
-            { id: "burrata-pomodorini", title: "Burrata and Cherry Tomatoes", subtitle: "Burrata, Cherry Tomatoes, Mixed Greens, Pra' Pesto, Extra Virgin Olive Oil", emoji: "🥗" },
-            { id: "crudo-bufala", title: "Prosciutto and Buffalo Mozzarella", subtitle: "Parma Prosciutto Crudo, La Cilentana Buffalo Mozzarella, Mixed Greens, Ground Pepper, Extra Virgin Olive Oil", emoji: "🥗" }
-          ]
-        },
-        {
-          title: "Fried",
-          emoji: "🍟",
-          content: [
-            { id: "patatine", title: "French Fries", subtitle: "with sauces of your choice", emoji: "🍟" },
-            { id: "suppli-telefono", title: "Supplì al telefono", subtitle: "Ragu and Mozzarella", emoji: "🍟" },
-            { id: "suppli-cacio-pepe", title: "Supplì cacio e pepe", subtitle: "Pecorino and Pepper", emoji: "🍟" },
-            { id: "crocchetta-patate", title: "Potato Croquette", subtitle: "Red Potatoes, Mozzarella, Cooked Ham and Rosemary", emoji: "🍟" },
-            { id: "crocchetta-mortadella", title: "Mortadella and Pistachio Croquette", subtitle: "Mortadella Bologna IGP and Pistachio Pesto", emoji: "🍟" },
-            { id: "polpette-fritte", title: "Fried Meatballs", subtitle: "Meatballs from Slow Food Presidium Beef and Pork", emoji: "🍟" },
-            { id: "panelle", title: "Panelle", subtitle: "with salt, pepper and lemon", emoji: "🍟" }
-          ]
-        },
-        {
-          title: "Desserts",
-          emoji: "🍰",
-          content: [
-            { id: "tortino-cioccolato", title: "Chocolate Lava Cake", subtitle: "", emoji: "🍫" },
-            { id: "pizza-nutella", title: "Nutella Pizza", subtitle: "with pistachio crumble", emoji: "🍕" },
-            { id: "tiramisu", title: "Tiramisù", subtitle: "", emoji: "🍰" },
-            { id: "cheesecake", title: "Cheesecake", subtitle: "Toppings: Nutella, sour cherry or pistachio", emoji: "🍰" },
-            { id: "gelato-fiordilatte", title: "Fiordilatte Gelato", subtitle: "Toppings: Nutella, sour cherry or pistachio", emoji: "🍨" },
-            { id: "sorbetto-limone", title: "Lemon Sorbet", subtitle: "", emoji: "🍋" }
-          ]
-        }
-      ],
-      es: [
-        {
-          title: "Masas",
-          emoji: "🫓",
-          content: [
-            { id: "classico", title: "Clásica", subtitle: "Masa de harina de trigo blando para una pizza muy aromática y sabrosa.", emoji: "🫓" },
-            { id: "sottile", title: "Fina", subtitle: "Con harina de trigo blando para una pizza ligera, crujiente, de borde bajo y fino.", emoji: "🫓" },
-            { id: "nero", title: "Negra", subtitle: "La sorprendente masa con carbón vegetal que ofrece una pizza ligera y digestiva.", emoji: "🫓" },
-            { id: "integrale", title: "Integral", subtitle: "Masa de harina integral para una pizza muy aromática y sabrosa.", emoji: "🫓" },
-            { id: "senza-frumento", title: "Sin trigo", subtitle: "Masa ligera a base de harinas naturalmente sin gluten. No apta para celíacos ya que puede estar sujeta a contaminación cruzada durante la cocción.", emoji: "🫓" }
-          ]
-        },
-        {
-          title: "Tradicionales",
-          emoji: "🍕",
-          content: [
-            { id: "margherita", title: "Margherita", subtitle: "Tomate La Concettina, fiordilatte de los Monti Lattari, albahaca", emoji: "🍕" },
-            { id: "margherita-piu", title: "Margherita più", subtitle: "Tomate La Concettina, fiordilatte de los Monti Lattari, Parmigiano Reggiano DOP, albahaca", emoji: "🍕" },
-            { id: "margherita-doppia", title: "Margherita doppia mozzarella", subtitle: "Tomate La Concettina, doble fiordilatte de los Monti Lattari, albahaca", emoji: "🍕" },
-            { id: "bufala", title: "Bufala", subtitle: "Tomate La Concettina, mozzarella de bufala La Cilentana, pimienta molida, albahaca, aceite de oliva", emoji: "🍕" },
-            { id: "marinara", title: "Marinara", subtitle: "Tomate La Concettina, ajo, orégano, albahaca", emoji: "🍕" },
-            { id: "napoli", title: "Napoli", subtitle: "Tomate La Concettina, fiordilatte de los Monti Lattari, anchoas de Cetara, albahaca", emoji: "🍕" },
-            { id: "prosciutto-cotto", title: "Prosciutto cotto", subtitle: "Tomate La Concettina, fiordilatte de los Monti Lattari, jamón cocido Raspini, Provolone del Monaco, albahaca", emoji: "🍕" },
-            { id: "crostino-cotto", title: "Crostino cotto", subtitle: "Fiordilatte de los Monti Lattari, jamón cocido Raspini, aceite de oliva, albahaca", emoji: "🍕" },
-            { id: "ortolana", title: "Ortolana", subtitle: "Fiordilatte de los Monti Lattari, stracciatella ahumada, crema de pimientos, berenjenas fritas, tomates secos, albahaca", emoji: "🍕" },
-            { id: "prosciutto-crudo", title: "Prosciutto crudo", subtitle: "Tomate La Concettina, fiordilatte de los Monti Lattari, jamón de Parma, albahaca", emoji: "🍕" },
-            { id: "salsiccia-friarielli", title: "Salsiccia e friarielli", subtitle: "Fiordilatte de los Monti Lattari, salchicha fresca, friarielli, albahaca", emoji: "🍕" },
-            { id: "capricciosa", title: "Capricciosa", subtitle: "Tomate La Concettina, fiordilatte de los Monti Lattari, jamón cocido Raspini, alcachofas, champiñones, aceitunas, albahaca", emoji: "🍕" }
-          ]
-        },
-        {
-          title: "Picantes",
-          emoji: "🌶️",
-          content: [
-            { id: "fradiavolo", title: "Fradiavolo", subtitle: "Tomate La Concettina, fiordilatte de los Monti Lattari, spianata picante Raspini receta Fradiavolo, Parmigiano Reggiano DOP, albahaca", emoji: "🌶️", featured: true },
-            { id: "pepperoni", title: "Pepperoni", subtitle: "Tomate La Concettina, fiordilatte de los Monti Lattari, salamino picante La Granda, miel de acacia picante, albahaca", emoji: "🌶️" },
-            { id: "fradiavolissima", title: "Fradiavolissima", subtitle: "Tomate La Concettina, fiordilatte de los Monti Lattari, spianata picante Raspini, salamino picante La Granda, 'Nduja di Spilinga, albahaca", emoji: "🌶️", featured: true }
-          ]
-        },
-        {
-          title: "Pop",
-          emoji: "✨",
-          content: [
-            { id: "li-mortazza-tua", title: "Li mortazza tua", subtitle: "Fiordilatte de los Monti Lattari, Mortadella Bologna IGP Raspini, stracciatella, pesto de pistacho, granillo de pistacho", emoji: "✨", featured: true },
-            { id: "gorgo-roll", title: "Gorgo 'n' Roll", subtitle: "Fiordilatte de los Monti Lattari, salchicha fresca, Gorgonzola DOP, albahaca", emoji: "✨" },
-            { id: "mr-bean", title: "Mr. Bean", subtitle: "Tomate La Concettina, salchicha fresca, cebolla roja caramelizada, alubias borlotti, alubias cannellini, stracciatella ahumada, aceite de ajo, pimienta negra, albahaca", emoji: "✨", featured: true },
-            { id: "stranger-chips", title: "Stranger Chips", subtitle: "Tomate La Concettina, alcaparras, aceite de oliva, mayonesa de mostaza, chips de patata, pimienta negra", emoji: "✨" },
-            { id: "porcino-contento", title: "Porcino e contento", subtitle: "Fiordilatte, mezcla de setas, porcini en aceite, polvo de porcini, albahaca", emoji: "✨" },
-            { id: "mr-wurstel", title: "Mr. Wurstel", subtitle: "Tomate La Concettina, fiordilatte de los Monti Lattari, wurstel de carne, albahaca", emoji: "✨" },
-            { id: "torna-pesto", title: "Torna pesto", subtitle: "Fiordilatte de los Monti Lattari, jamón cocido Raspini, patatas al horno, gotas de Pesto di Pra', albahaca", emoji: "✨" },
-            { id: "polpette-gogo", title: "Polpette a go gò", subtitle: "Tomate La Concettina, fiordilatte, Parmigiano Reggiano DOP, albóndigas fritas, albahaca", emoji: "✨" },
-            { id: "fata-zucchina", title: "Fata Zucchina", subtitle: "Fiordilatte, crema de calabacín y menta, calabacín frito, Provolone del Monaco DOP, pimienta, albahaca", emoji: "✨" },
-            { id: "carciofunky", title: "Carciofunky", subtitle: "Crema de alcachofas, fiordilatte, salchicha fresca, rúcula, aceitunas", emoji: "✨" }
-          ]
-        },
-        {
-          title: "Pasta",
-          emoji: "🍝",
-          content: [
-            { id: "carbonara", title: "Carbonara", subtitle: "Mezze maniche, huevos, pecorino romano, guanciale crujiente, pimienta negra", emoji: "🍝" },
-            { id: "amatriciana", title: "Amatriciana", subtitle: "Mezze maniche, tomate, pecorino romano, guanciale crujiente, pimienta negra", emoji: "🍝" },
-            { id: "cacio-pepe", title: "Cacio e pepe", subtitle: "Tonnarelli, pecorino romano, pimienta negra", emoji: "🍝" },
-            { id: "dolcevita", title: "Dolcevita", subtitle: "Mezze maniche, tomate, stracciatella, pesto de Prà", emoji: "🍝" },
-            { id: "ragu-bolognese", title: "Ragù alla bolognese", subtitle: "Mezze maniche con ragú a la boloñesa", emoji: "🍝" }
-          ]
-        },
-        {
-          title: "Ensaladas y Platillos",
-          emoji: "🥗",
-          content: [
-            { id: "kung-fu-pollo", title: "Kung fu pollo", subtitle: "Mezcla de lechugas, pollo marinado en salsa de soja, lascas de Grana Padano DOP, tarallo de almendra, mostaza con miel y salsa de yogur", emoji: "🥗" },
-            { id: "dillo-avocado", title: "Dillo all'avocado", subtitle: "Mezcla de lechugas, alcachofas, tomates datterini, aceitunas, granillo de pistacho, aguacate, aceite de oliva", emoji: "🥗" },
-            { id: "myss-feta", title: "Myss feta", subtitle: "Mezcla de lechugas, tomates datterini, atún, feta griega DOP, aceitunas, aceite de oliva", emoji: "🥗" },
-            { id: "zuppa-legumi", title: "Sopa de legumbres y cereales", subtitle: "con salvia, romero y aceite de oliva", emoji: "🥗" },
-            { id: "burrata-pomodorini", title: "Burrata y tomatitos", subtitle: "Burrata, tomates datterini, mezcla de lechugas, Pesto di Pra', aceite de oliva", emoji: "🥗" },
-            { id: "crudo-bufala", title: "Crudo y bufala", subtitle: "Jamón curado de Parma, mozzarella de bufala La Cilentana, mezcla de lechugas, pimienta, aceite de oliva", emoji: "🥗" }
-          ]
-        },
-        {
-          title: "Fritos",
-          emoji: "🍟",
-          content: [
-            { id: "patatine", title: "Patatas fritas", subtitle: "con salsas a elección", emoji: "🍟" },
-            { id: "suppli-telefono", title: "Supplì al telefono", subtitle: "Ragú y mozzarella", emoji: "🍟" },
-            { id: "suppli-cacio-pepe", title: "Supplì cacio e pepe", subtitle: "Pecorino y pimienta", emoji: "🍟" },
-            { id: "crocchetta-patate", title: "Croqueta de patatas", subtitle: "Patatas rojas, mozzarella, jamón cocido y romero", emoji: "🍟" },
-            { id: "crocchetta-mortadella", title: "Croqueta mortadella y pistacho", subtitle: "Mortadella Bologna IGP y pesto de pistacho", emoji: "🍟" },
-            { id: "polpette-fritte", title: "Albóndigas fritas", subtitle: "Albóndigas de carne de vacuno y cerdo", emoji: "🍟" },
-            { id: "panelle", title: "Panelle", subtitle: "con sal, pimienta y limón", emoji: "🍟" }
-          ]
-        },
-        {
-          title: "Postres",
-          emoji: "🍰",
-          content: [
-            { id: "tortino-cioccolato", title: "Tortino de chocolate", subtitle: "", emoji: "🍫" },
-            { id: "pizza-nutella", title: "Pizza con Nutella", subtitle: "con granillo de pistacho", emoji: "🍕" },
-            { id: "tiramisu", title: "Tiramisù", subtitle: "", emoji: "🍰" },
-            { id: "cheesecake", title: "Cheesecake", subtitle: "Toppings: Nutella, amarena o pistacho", emoji: "🍰" },
-            { id: "gelato-fiordilatte", title: "Helado de fiordilatte", subtitle: "Toppings: Nutella, amarena o pistacho", emoji: "🍨" },
-            { id: "sorbetto-limone", title: "Sorbete de limón", subtitle: "", emoji: "🍋" }
-          ]
-        }
-      ],
-      fr: [
-        {
-          title: "Pâtes à pizza",
-          emoji: "🫓",
-          content: [
-            { id: "classico", title: "Classique", subtitle: "Une pâte à base de farine de blé tendre pour une pizza très parfumée et savoureuse.", emoji: "🫓" },
-            { id: "sottile", title: "Fine", subtitle: "Avec de la farine de blé tendre pour une pizza légère, croustillante, au bord bas et fin.", emoji: "🫓" },
-            { id: "nero", title: "Noire", subtitle: "L'étonnante pâte au charbon végétal qui offre une pizza légère et digestible.", emoji: "🫓" },
-            { id: "integrale", title: "Complète", subtitle: "Une pâte à base de farine complète pour une pizza très parfumée et savoureuse.", emoji: "🫓" },
-            { id: "senza-frumento", title: "Sans blé", subtitle: "Pâte légère à base de farines naturellement sans gluten. Non adaptée aux coeliaques car susceptible de contamination croisée pendant la cuisson.", emoji: "🫓" }
-          ]
-        },
-        {
-          title: "Traditionnelles",
-          emoji: "🍕",
-          content: [
-            { id: "margherita", title: "Margherita", subtitle: "Tomate La Concettina, fiordilatte des Monti Lattari, basilic", emoji: "🍕" },
-            { id: "margherita-piu", title: "Margherita più", subtitle: "Tomate La Concettina, fiordilatte des Monti Lattari, Parmigiano Reggiano DOP, basilic", emoji: "🍕" },
-            { id: "margherita-doppia", title: "Margherita doppia mozzarella", subtitle: "Tomate La Concettina, double fiordilatte des Monti Lattari, basilic", emoji: "🍕" },
-            { id: "bufala", title: "Bufala", subtitle: "Tomate La Concettina, mozzarella de bufflonne La Cilentana, poivre moulu, basilic, huile d'olive", emoji: "🍕" },
-            { id: "marinara", title: "Marinara", subtitle: "Tomate La Concettina, ail, origan, basilic", emoji: "🍕" },
-            { id: "napoli", title: "Napoli", subtitle: "Tomate La Concettina, fiordilatte des Monti Lattari, anchois de Cetara, basilic", emoji: "🍕" },
-            { id: "prosciutto-cotto", title: "Prosciutto cotto", subtitle: "Tomate La Concettina, fiordilatte des Monti Lattari, jambon cuit Raspini, Provolone del Monaco, basilic", emoji: "🍕" },
-            { id: "crostino-cotto", title: "Crostino cotto", subtitle: "Fiordilatte des Monti Lattari, jambon cuit Raspini, huile d'olive, basilic", emoji: "🍕" },
-            { id: "ortolana", title: "Ortolana", subtitle: "Fiordilatte des Monti Lattari, stracciatella fumée, crème de poivrons, aubergines frites, tomates séchées, basilic", emoji: "🍕" },
-            { id: "prosciutto-crudo", title: "Prosciutto crudo", subtitle: "Tomate La Concettina, fiordilatte des Monti Lattari, jambon cru de Parme, basilic", emoji: "🍕" },
-            { id: "salsiccia-friarielli", title: "Salsiccia e friarielli", subtitle: "Fiordilatte des Monti Lattari, saucisse fraîche, friarielli, basilic", emoji: "🍕" },
-            { id: "capricciosa", title: "Capricciosa", subtitle: "Tomate La Concettina, fiordilatte des Monti Lattari, jambon cuit Raspini, artichauts, champignons, olives, basilic", emoji: "🍕" }
-          ]
-        },
-        {
-          title: "Épicées",
-          emoji: "🌶️",
-          content: [
-            { id: "fradiavolo", title: "Fradiavolo", subtitle: "Tomate La Concettina, fiordilatte des Monti Lattari, spianata piquante Raspini recette Fradiavolo, Parmigiano Reggiano DOP, basilic", emoji: "🌶️", featured: true },
-            { id: "pepperoni", title: "Pepperoni", subtitle: "Tomate La Concettina, fiordilatte des Monti Lattari, salami piquant La Granda, miel d'acacia piquant, basilic", emoji: "🌶️" },
-            { id: "fradiavolissima", title: "Fradiavolissima", subtitle: "Tomate La Concettina, fiordilatte des Monti Lattari, spianata piquante Raspini, salami piquant La Granda, 'Nduja di Spilinga, basilic", emoji: "🌶️", featured: true }
-          ]
-        },
-        {
-          title: "Pop",
-          emoji: "✨",
-          content: [
-            { id: "li-mortazza-tua", title: "Li mortazza tua", subtitle: "Fiordilatte des Monti Lattari, Mortadella Bologna IGP Raspini, stracciatella, pesto de pistache, éclats de pistache", emoji: "✨", featured: true },
-            { id: "gorgo-roll", title: "Gorgo 'n' Roll", subtitle: "Fiordilatte des Monti Lattari, saucisse fraîche, Gorgonzola DOP, basilic", emoji: "✨" },
-            { id: "mr-bean", title: "Mr. Bean", subtitle: "Tomate La Concettina, saucisse fraîche, oignon rouge caramélisé, haricots borlotti, haricots cannellini, stracciatella fumée, huile à l'ail, poivre noir, basilic", emoji: "✨", featured: true },
-            { id: "stranger-chips", title: "Stranger Chips", subtitle: "Tomate La Concettina, câpres, huile d'olive, mayonnaise à la moutarde, chips de pommes de terre, poivre noir", emoji: "✨" },
-            { id: "porcino-contento", title: "Porcino e contento", subtitle: "Fiordilatte, mélange de champignons, cèpes à l'huile, poudre de cèpes, basilic", emoji: "✨" },
-            { id: "mr-wurstel", title: "Mr. Wurstel", subtitle: "Tomate La Concettina, fiordilatte des Monti Lattari, saucisse de bœuf et porc, basilic", emoji: "✨" },
-            { id: "torna-pesto", title: "Torna pesto", subtitle: "Fiordilatte des Monti Lattari, jambon cuit Raspini, pommes de terre rôties, gouttes de Pesto di Pra', basilic", emoji: "✨" },
-            { id: "polpette-gogo", title: "Polpette a go gò", subtitle: "Tomate La Concettina, fiordilatte, Parmigiano Reggiano DOP, boulettes de viande frites, basilic", emoji: "✨" },
-            { id: "fata-zucchina", title: "Fata Zucchina", subtitle: "Fiordilatte, crème de courgettes et menthe, courgettes frites, Provolone del Monaco DOP, poivre, basilic", emoji: "✨" },
-            { id: "carciofunky", title: "Carciofunky", subtitle: "Crème d'artichauts, fiordilatte, saucisse fraîche, roquette, olives", emoji: "✨" }
-          ]
-        },
-        {
-          title: "Pâtes",
-          emoji: "🍝",
-          content: [
-            { id: "carbonara", title: "Carbonara", subtitle: "Mezze maniche, œufs, pecorino romano, guanciale croustillant, poivre noir", emoji: "🍝" },
-            { id: "amatriciana", title: "Amatriciana", subtitle: "Mezze maniche, tomate, pecorino romano, guanciale croustillant, poivre noir", emoji: "🍝" },
-            { id: "cacio-pepe", title: "Cacio e pepe", subtitle: "Tonnarelli, pecorino romano, poivre noir", emoji: "🍝" },
-            { id: "dolcevita", title: "Dolcevita", subtitle: "Mezze maniche, tomate, stracciatella, pesto de Prà", emoji: "🍝" },
-            { id: "ragu-bolognese", title: "Ragù alla bolognese", subtitle: "Mezze maniche au ragù à la bolognaise", emoji: "🍝" }
-          ]
-        },
-        {
-          title: "Salades et Petits Plats",
-          emoji: "🥗",
-          content: [
-            { id: "kung-fu-pollo", title: "Kung fu pollo", subtitle: "Mesclun, poulet mariné à la sauce soja, copeaux de Grana Padano DOP, taralli aux amandes, moutarde au miel et sauce yaourt", emoji: "🥗" },
-            { id: "dillo-avocado", title: "Dillo all'avocado", subtitle: "Mesclun, artichauts, tomates datterini, olives, éclats de pistache, avocat, huile d'olive", emoji: "🥗" },
-            { id: "myss-feta", title: "Myss feta", subtitle: "Mesclun, tomates datterini, thon, feta grecque DOP, olives, huile d'olive", emoji: "🥗" },
-            { id: "zuppa-legumi", title: "Soupe de légumineuses et céréales", subtitle: "avec sauge, romarin et huile d'olive", emoji: "🥗" },
-            { id: "burrata-pomodorini", title: "Burrata et tomates cerises", subtitle: "Burrata, tomates datterini, mesclun, Pesto di Pra', huile d'olive", emoji: "🥗" },
-            { id: "crudo-bufala", title: "Crudo et bufala", subtitle: "Jambon cru de Parme, mozzarella de bufflonne La Cilentana, mesclun, poivre, huile d'olive", emoji: "🥗" }
-          ]
-        },
-        {
-          title: "Fritures",
-          emoji: "🍟",
-          content: [
-            { id: "patatine", title: "Frites", subtitle: "avec sauces au choix", emoji: "🍟" },
-            { id: "suppli-telefono", title: "Supplì al telefono", subtitle: "Ragù et mozzarella", emoji: "🍟" },
-            { id: "suppli-cacio-pepe", title: "Supplì cacio e pepe", subtitle: "Pecorino et poivre", emoji: "🍟" },
-            { id: "crocchetta-patate", title: "Croquette de pommes de terre", subtitle: "Pommes de terre rouges, mozzarella, jambon cuit et romarin", emoji: "🍟" },
-            { id: "crocchetta-mortadella", title: "Croquette mortadelle et pistache", subtitle: "Mortadella Bologna IGP et pesto de pistache", emoji: "🍟" },
-            { id: "polpette-fritte", title: "Boulettes frites", subtitle: "Boulettes de viande de bœuf et porc", emoji: "🍟" },
-            { id: "panelle", title: "Panelle", subtitle: "avec sel, poivre et citron", emoji: "🍟" }
-          ]
-        },
-        {
-          title: "Desserts",
-          emoji: "🍰",
-          content: [
-            { id: "tortino-cioccolato", title: "Moelleux au chocolat", subtitle: "", emoji: "🍫" },
-            { id: "pizza-nutella", title: "Pizza au Nutella", subtitle: "avec éclats de pistache", emoji: "🍕" },
-            { id: "tiramisu", title: "Tiramisù", subtitle: "", emoji: "🍰" },
-            { id: "cheesecake", title: "Cheesecake", subtitle: "Toppings: Nutella, amarena ou pistache", emoji: "🍰" },
-            { id: "gelato-fiordilatte", title: "Glace fiordilatte", subtitle: "Toppings: Nutella, amarena ou pistache", emoji: "🍨" },
-            { id: "sorbetto-limone", title: "Sorbet au citron", subtitle: "", emoji: "🍋" }
-          ]
-        }
-      ]
-    };
-
-    let currentLang = 'it';
-    let currentCategory = 0;
-
-    // Check if language was previously selected
-    function init() {
-      const savedLang = localStorage.getItem('fradiavolo-menu-lang');
-      if (savedLang) {
-        currentLang = savedLang;
-        closeLangModal();
-        updateUI();
-      }
-      renderTabs();
-      renderMenu();
-    }
-
-    // Language selection
-    function selectLanguage(lang) {
-      currentLang = lang;
-      localStorage.setItem('fradiavolo-menu-lang', lang);
-      closeLangModal();
-      updateUI();
-      currentCategory = 0;
-      renderTabs();
-      renderMenu();
-    }
-
-    function updateUI() {
-      const t = translations[currentLang];
-      document.getElementById('heroTitle').textContent = t.heroTitle;
-      document.getElementById('heroSubtitle').textContent = t.heroSubtitle;
-      document.getElementById('currentFlag').textContent = t.flag;
-      document.getElementById('currentLang').textContent = t.code;
-    }
-
-    function openLangModal() {
-      document.getElementById('langModal').style.display = 'flex';
-    }
-
-    function closeLangModal() {
-      document.getElementById('langModal').style.display = 'none';
-    }
-
-    // Render category tabs
-    function renderTabs() {
-      const tabsContainer = document.getElementById('categoryTabs');
-      const sections = menuData[currentLang];
-      tabsContainer.innerHTML = sections.map((section, index) => `
-        <button
-          onclick="selectCategory(${index})"
-          class="category-btn px-4 md:px-8 py-3 pt-4 text-xl md:text-3xl font-semibold uppercase border-2 border-black rounded transition-all whitespace-nowrap ${currentCategory === index ? 'bg-fra-yellow text-black' : 'bg-fra-pepperwhite text-fra-red hover:bg-fra-yellow hover:text-black'}"
-        >
-          ${section.title}
-        </button>
-      `).join('');
-    }
-
-    // Render menu items (compact layout only)
-    function renderMenu() {
-      const sections = menuData[currentLang];
-      const section = sections[currentCategory];
-      const grid = document.getElementById('menuGrid');
-      const title = document.getElementById('categoryTitle');
-
-      title.textContent = section.title;
-
-      grid.innerHTML = section.content.map(item => `
-        <div class="bg-fra-pepperwhite border-2 border-black p-4 md:p-5 ${item.featured ? 'ring-2 ring-fra-yellow' : ''}">
-          <div class="flex items-start gap-3">
-            <span class="text-2xl md:text-3xl">${item.emoji}</span>
-            <div class="flex-1">
-              <div class="flex items-center gap-2 mb-2">
-                <h3 class="text-xl md:text-2xl font-bold text-fra-red uppercase leading-tight">
-                  ${item.title}
-                </h3>
-                ${item.featured ? '<span class="text-sm bg-fra-yellow px-2 py-1 border border-black">❤️</span>' : ''}
-              </div>
-              <p class="text-xs md:text-sm text-fra-black/80 uppercase leading-relaxed">
-                ${item.subtitle}
-              </p>
-            </div>
-          </div>
+    <!-- Language Selector -->
+    <div class="bg-amber-100 border-b-2 border-black py-3 px-4">
+        <div class="max-w-7xl mx-auto flex justify-center gap-2">
+            <button onclick="setLanguage('it')" class="lang-btn px-4 py-2 rounded-lg font-medium text-sm bg-red-600 text-white" data-lang="it">Italiano</button>
+            <button onclick="setLanguage('en')" class="lang-btn px-4 py-2 rounded-lg font-medium text-sm bg-gray-200 hover:bg-gray-300" data-lang="en">English</button>
+            <button onclick="setLanguage('es')" class="lang-btn px-4 py-2 rounded-lg font-medium text-sm bg-gray-200 hover:bg-gray-300" data-lang="es">Espanol</button>
+            <button onclick="setLanguage('fr')" class="lang-btn px-4 py-2 rounded-lg font-medium text-sm bg-gray-200 hover:bg-gray-300" data-lang="fr">Francais</button>
         </div>
-      `).join('');
-    }
+    </div>
 
-    // Select category
-    function selectCategory(index) {
-      currentCategory = index;
-      renderTabs();
-      renderMenu();
-    }
+    <!-- Category Tabs -->
+    <nav class="bg-amber-200 border-b-2 border-black sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3">
+            <div class="flex flex-wrap justify-center gap-2">
+                <button onclick="showSection('pizze')" class="section-tab active px-4 py-2 rounded-lg font-semibold text-sm uppercase" data-section="pizze">
+                    <span class="mr-1">🍕</span> <span class="section-label" data-it="Pizze" data-en="Pizzas" data-es="Pizzas" data-fr="Pizzas">Pizze</span>
+                </button>
+                <button onclick="showSection('pasta')" class="section-tab px-4 py-2 rounded-lg font-semibold text-sm uppercase bg-white" data-section="pasta">
+                    <span class="mr-1">🍝</span> <span class="section-label" data-it="Pasta" data-en="Pasta" data-es="Pasta" data-fr="Pates">Pasta</span>
+                </button>
+                <button onclick="showSection('insalate')" class="section-tab px-4 py-2 rounded-lg font-semibold text-sm uppercase bg-white" data-section="insalate">
+                    <span class="mr-1">🥗</span> <span class="section-label" data-it="Insalate" data-en="Salads" data-es="Ensaladas" data-fr="Salades">Insalate</span>
+                </button>
+                <button onclick="showSection('fritti')" class="section-tab px-4 py-2 rounded-lg font-semibold text-sm uppercase bg-white" data-section="fritti">
+                    <span class="mr-1">🍟</span> <span class="section-label" data-it="Fritti" data-en="Fried" data-es="Fritos" data-fr="Fritures">Fritti</span>
+                </button>
+                <button onclick="showSection('dolci')" class="section-tab px-4 py-2 rounded-lg font-semibold text-sm uppercase bg-white" data-section="dolci">
+                    <span class="mr-1">🍰</span> <span class="section-label" data-it="Dolci" data-en="Desserts" data-es="Postres" data-fr="Desserts">Dolci</span>
+                </button>
+            </div>
+        </div>
+    </nav>
 
-    // Initialize on load
-    init();
-  </script>
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+
+        <!-- PIZZE SECTION -->
+        <section id="pizze" class="menu-section active">
+            <!-- Pizza Subcategory Tabs -->
+            <div class="flex justify-center gap-2 mb-6 flex-wrap">
+                <button onclick="showPizzaSubsection('tradizionali')" class="subcategory-tab active px-5 py-2 rounded-full font-medium text-sm bg-white border-2 border-amber-400" data-pizza="tradizionali">
+                    <span class="pizza-label" data-it="Tradizionali" data-en="Traditional" data-es="Tradicionales" data-fr="Traditionnelles">Tradizionali</span>
+                </button>
+                <button onclick="showPizzaSubsection('diavole')" class="subcategory-tab px-5 py-2 rounded-full font-medium text-sm bg-white border-2 border-amber-400" data-pizza="diavole">
+                    <span class="mr-1">🌶️</span> <span class="pizza-label" data-it="Diavole" data-en="Spicy" data-es="Picantes" data-fr="Epicees">Diavole</span>
+                </button>
+                <button onclick="showPizzaSubsection('pop')" class="subcategory-tab px-5 py-2 rounded-full font-medium text-sm bg-white border-2 border-amber-400" data-pizza="pop">
+                    <span class="mr-1">✨</span> <span class="pizza-label" data-it="Pop" data-en="Pop" data-es="Pop" data-fr="Pop">Pop</span>
+                </button>
+            </div>
+
+            <!-- Tradizionali -->
+            <div id="tradizionali" class="pizza-subsection active">
+                <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">
+                    <span class="subsection-title" data-it="🍕 Pizze Tradizionali" data-en="🍕 Traditional Pizzas" data-es="🍕 Pizzas Tradicionales" data-fr="🍕 Pizzas Traditionnelles">🍕 Pizze Tradizionali</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                        <h3 class="font-bold text-lg text-gray-800">Margherita</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Basilico" data-en="La Concettina Tomato, Fiordilatte from Monti Lattari, Basil" data-es="Tomate La Concettina, fiordilatte de los Monti Lattari, albahaca" data-fr="Tomate La Concettina, fiordilatte des Monti Lattari, basilic">Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                        <h3 class="font-bold text-lg text-gray-800">Margherita piu</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Parmigiano Reggiano DOP, Basilico" data-en="La Concettina Tomato, Fiordilatte from Monti Lattari, Parmigiano Reggiano DOP, Basil" data-es="Tomate La Concettina, fiordilatte de los Monti Lattari, Parmigiano Reggiano DOP, albahaca" data-fr="Tomate La Concettina, fiordilatte des Monti Lattari, Parmigiano Reggiano DOP, basilic">Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Parmigiano Reggiano DOP, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                        <h3 class="font-bold text-lg text-gray-800">Margherita doppia mozzarella</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, doppio Fiordilatte dei Monti Lattari, Basilico" data-en="La Concettina Tomato, Double Fiordilatte from Monti Lattari, Basil" data-es="Tomate La Concettina, doble fiordilatte de los Monti Lattari, albahaca" data-fr="Tomate La Concettina, double fiordilatte des Monti Lattari, basilic">Pomodoro La Concettina, doppio Fiordilatte dei Monti Lattari, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                        <h3 class="font-bold text-lg text-gray-800">Bufala</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, Mozzarella di Latte di Bufala La Cilentana, Pepe Macinato, Basilico, Olio EVO" data-en="La Concettina Tomato, La Cilentana Buffalo Mozzarella, Ground Pepper, Basil, Extra Virgin Olive Oil" data-es="Tomate La Concettina, mozzarella de bufala La Cilentana, pimienta negra molida, albahaca, aceite de oliva virgen extra" data-fr="Tomate La Concettina, mozzarella de bufflonne La Cilentana, poivre noir moulu, basilic, huile d'olive extra vierge">Pomodoro La Concettina, Mozzarella di Latte di Bufala La Cilentana, Pepe Macinato, Basilico, Olio EVO</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                        <h3 class="font-bold text-lg text-gray-800">Marinara</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, Aglio, Origano, Basilico" data-en="La Concettina Tomato, Garlic, Oregano, Basil" data-es="Tomate La Concettina, ajo, oregano, albahaca" data-fr="Tomate La Concettina, ail, origan, basilic">Pomodoro La Concettina, Aglio, Origano, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                        <h3 class="font-bold text-lg text-gray-800">Napoli</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Alici di Cetara, Basilico" data-en="La Concettina Tomato, Fiordilatte from Monti Lattari, Cetara Anchovies, Basil" data-es="Tomate La Concettina, fiordilatte de los Monti Lattari, anchoas de Cetara, albahaca" data-fr="Tomate La Concettina, fiordilatte des Monti Lattari, anchois de Cetara, basilic">Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Alici di Cetara, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                        <h3 class="font-bold text-lg text-gray-800">Prosciutto cotto</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Cotto Raspini, Provolone del Monaco, Basilico" data-en="La Concettina Tomato, Fiordilatte from Monti Lattari, Raspini Cooked Ham, Provolone del Monaco, Basil" data-es="Tomate La Concettina, fiordilatte de los Monti Lattari, jamon cocido Raspini, Provolone del Monaco, albahaca" data-fr="Tomate La Concettina, fiordilatte des Monti Lattari, jambon cuit Raspini, Provolone del Monaco, basilic">Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Cotto Raspini, Provolone del Monaco, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                        <h3 class="font-bold text-lg text-gray-800">Crostino cotto</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Fiordilatte dei Monti Lattari, Prosciutto Cotto Raspini, Olio EVO, Basilico" data-en="Fiordilatte from Monti Lattari, Raspini Cooked Ham, Extra Virgin Olive Oil, Basil" data-es="Fiordilatte de los Monti Lattari, jamon cocido Raspini, aceite de oliva virgen extra, albahaca" data-fr="Fiordilatte des Monti Lattari, jambon cuit Raspini, huile d'olive extra vierge, basilic">Fiordilatte dei Monti Lattari, Prosciutto Cotto Raspini, Olio EVO, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                        <h3 class="font-bold text-lg text-gray-800">Ortolana</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Fiordilatte dei Monti Lattari, Stracciatella Affumicata, Crema di peperoni al forno, Melanzane fritte, Pomodori secchi, Basilico" data-en="Fiordilatte from Monti Lattari, Smoked Stracciatella, Roasted Pepper Cream, Fried Eggplant, Sun-dried Tomatoes, Basil" data-es="Fiordilatte de los Monti Lattari, stracciatella ahumada, crema de pimientos asados, berenjena frita, tomate seco, albahaca" data-fr="Fiordilatte des Monti Lattari, stracciatella fumee, creme de poivrons rotis, aubergines frites, tomates sechees, basilic">Fiordilatte dei Monti Lattari, Stracciatella Affumicata, Crema di peperoni al forno, Melanzane fritte, Pomodori secchi, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                        <h3 class="font-bold text-lg text-gray-800">Prosciutto crudo</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Prosciutto Crudo di Parma, Basilico" data-en="La Concettina Tomato, Fiordilatte from Monti Lattari, Parma Prosciutto Crudo, Basil" data-es="Tomate La Concettina, fiordilatte de los Monti Lattari, jamon de Parma, albahaca" data-fr="Tomate La Concettina, fiordilatte des Monti Lattari, jambon cru de Parme, basilic">Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Prosciutto Crudo di Parma, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                        <h3 class="font-bold text-lg text-gray-800">Salsiccia e friarielli</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Fiordilatte dei Monti Lattari, Salsiccia Fresca, Friarielli, Basilico" data-en="Fiordilatte from Monti Lattari, Fresh Sausage, Friarielli, Basil" data-es="Fiordilatte de los Monti Lattari, salchicha fresca, friarielli, albahaca" data-fr="Fiordilatte des Monti Lattari, saucisse fraiche, friarielli, basilic">Fiordilatte dei Monti Lattari, Salsiccia Fresca, Friarielli, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                        <h3 class="font-bold text-lg text-gray-800">Capricciosa</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Prosciutto Cotto Raspini, Carciofi, Funghi, Olive, Basilico" data-en="La Concettina Tomato, Fiordilatte from Monti Lattari, Raspini Cooked Ham, Artichokes, Mushrooms, Olives, Basil" data-es="Tomate La Concettina, fiordilatte de los Monti Lattari, jamon cocido Raspini, alcachofas, champinones, aceitunas, albahaca" data-fr="Tomate La Concettina, fiordilatte des Monti Lattari, jambon cuit Raspini, artichauts, champignons, olives, basilic">Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Prosciutto Cotto Raspini, Carciofi, Funghi, Olive, Basilico</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diavole -->
+            <div id="diavole" class="pizza-subsection">
+                <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">
+                    <span class="subsection-title" data-it="🌶️ Pizze Diavole" data-en="🌶️ Spicy Pizzas" data-es="🌶️ Pizzas Picantes" data-fr="🌶️ Pizzas Epicees">🌶️ Pizze Diavole</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-red-300 ring-2 ring-red-200">
+                        <div class="flex items-center gap-2 mb-1">
+                            <h3 class="font-bold text-lg text-gray-800">Fradiavolo</h3>
+                            <span class="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">Signature</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Spianata Piccante Raspini ricetta Fradiavolo, Parmigiano Reggiano DOP, Basilico" data-en="La Concettina Tomato, Fiordilatte from Monti Lattari, Raspini Spicy Spianata Fradiavolo Recipe, Parmigiano Reggiano DOP, Basil" data-es="Tomate La Concettina, fiordilatte de los Monti Lattari, spianata picante Raspini - receta Fradiavolo, Parmigiano Reggiano DOP, albahaca" data-fr="Tomate La Concettina, fiordilatte des Monti Lattari, spianata piquante Raspini (recette Fradiavolo), Parmigiano Reggiano DOP, basilic">Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Spianata Piccante Raspini ricetta Fradiavolo, Parmigiano Reggiano DOP, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-red-300">
+                        <h3 class="font-bold text-lg text-gray-800">Pepperoni</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Salamino Piccante La Granda, Miele d'Acacia Piccante, Basilico" data-en="La Concettina Tomato, Fiordilatte from Monti Lattari, La Granda Spicy Salami, Spicy Acacia Honey, Basil" data-es="Tomate La Concettina, fiordilatte de los Monti Lattari, salamino picante La Granda, miel de acacia picante, albahaca" data-fr="Tomate La Concettina, fiordilatte des Monti Lattari, salami piquant La Granda, miel d'acacia piquant, basilic">Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Salamino Piccante La Granda, Miele d'Acacia Piccante, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-red-300 ring-2 ring-red-200">
+                        <div class="flex items-center gap-2 mb-1">
+                            <h3 class="font-bold text-lg text-gray-800">Fradiavolissima</h3>
+                            <span class="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">Extra Hot</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Spianata Piccante Raspini ricetta Fradiavolo, Salamino Piccante La Granda, 'Nduja di Spilinga, Basilico" data-en="La Concettina Tomato, Fiordilatte from Monti Lattari, Raspini Spicy Spianata Fradiavolo Recipe, La Granda Spicy Salami, Nduja from Spilinga, Basil" data-es="Tomate La Concettina, fiordilatte de los Monti Lattari, spianata picante Raspini - receta Fradiavolo, salamino picante La Granda, 'Nduja di Spilinga, albahaca" data-fr="Tomate La Concettina, fiordilatte des Monti Lattari, spianata piquante Raspini (recette Fradiavolo), salami piquant La Granda, 'Nduja di Spilinga, basilic">Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Spianata Piccante Raspini ricetta Fradiavolo, Salamino Piccante La Granda, 'Nduja di Spilinga, Basilico</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pop -->
+            <div id="pop" class="pizza-subsection">
+                <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">
+                    <span class="subsection-title" data-it="✨ Pizze Pop" data-en="✨ Pop Pizzas" data-es="✨ Pizzas Pop" data-fr="✨ Pizzas Pop">✨ Pizze Pop</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-purple-200 ring-2 ring-purple-100">
+                        <div class="flex items-center gap-2 mb-1">
+                            <h3 class="font-bold text-lg text-gray-800">Li mortazza tua</h3>
+                            <span class="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full font-medium">Best Seller</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Fiordilatte dei Monti Lattari, Mortadella Bologna IGP Raspini, Stracciatella, Pesto di pistacchio, Granella di Pistacchio" data-en="Fiordilatte from Monti Lattari, Raspini Mortadella Bologna IGP, Stracciatella, Pistachio Pesto, Crushed Pistachios" data-es="Fiordilatte de los Monti Lattari, Mortadella Bologna IGP Raspini, stracciatella, pesto de pistacho, granillo de pistacho" data-fr="Fiordilatte des Monti Lattari, Mortadella Bologna IGP Raspini, stracciatella, pesto de pistache, eclats de pistache">Fiordilatte dei Monti Lattari, Mortadella Bologna IGP Raspini, Stracciatella, Pesto di pistacchio, Granella di Pistacchio</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-purple-200">
+                        <h3 class="font-bold text-lg text-gray-800">Gorgo 'n' Roll</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Fiordilatte dei Monti Lattari, Salsiccia Fresca, Gorgonzola DOP, Basilico" data-en="Fiordilatte from Monti Lattari, Fresh Sausage, Gorgonzola DOP, Basil" data-es="Fiordilatte de los Monti Lattari, salchicha fresca, Gorgonzola DOP, albahaca" data-fr="Fiordilatte des Monti Lattari, saucisse fraiche, Gorgonzola DOP, basilic">Fiordilatte dei Monti Lattari, Salsiccia Fresca, Gorgonzola DOP, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-purple-200 ring-2 ring-purple-100">
+                        <div class="flex items-center gap-2 mb-1">
+                            <h3 class="font-bold text-lg text-gray-800">Mr. bean</h3>
+                            <span class="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full font-medium">Chef's Pick</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, Salsiccia Fresca, Cipolla Rossa Caramellata, Fagioli Borlotti e Cannellini, Stracciatella Affumicata, Olio all'aglio, Pepe Nero, Basilico" data-en="La Concettina Tomato, Fresh Sausage, Caramelized Red Onion, Borlotti Beans, Cannellini Beans, Smoked Stracciatella, Garlic Oil, Ground Black Pepper, Basil" data-es="Tomate La Concettina, salchicha fresca, cebolla roja caramelizada, alubias borlotti, alubias cannellini, stracciatella ahumada, aceite de ajo, pimienta negra molida, albahaca" data-fr="Tomate La Concettina, saucisse fraiche, oignon rouge caramelise, haricots borlotti, haricots cannellini, stracciatella fumee, huile a l'ail, poivre noir moulu, basilic">Pomodoro La Concettina, Salsiccia Fresca, Cipolla Rossa Caramellata, Fagioli Borlotti e Cannellini, Stracciatella Affumicata, Olio all'aglio, Pepe Nero, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-purple-200">
+                        <h3 class="font-bold text-lg text-gray-800">Stranger chips</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, Capperi, Olio EVO, Maionese alla Senape, Chips di Patate, Pepe Nero Macinato" data-en="La Concettina Tomato, Capers, Extra Virgin Olive Oil, Mustard Mayonnaise, Potato Chips, Ground Black Pepper" data-es="Tomate La Concettina, alcaparras, aceite de oliva virgen extra, mayonesa de mostaza, chips de patata, pimienta negra molida" data-fr="Tomate La Concettina, capres, huile d'olive extra vierge, mayonnaise a la moutarde, chips de pommes de terre, poivre noir moulu">Pomodoro La Concettina, Capperi, Olio EVO, Maionese alla Senape, Chips di Patate, Pepe Nero Macinato</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-purple-200">
+                        <h3 class="font-bold text-lg text-gray-800">Porcino e contento</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Fiordilatte, Funghi misti, Fungo Porcino sott'olio, Polvere di Fungo Porcino, Basilico" data-en="Fiordilatte, Mixed Mushrooms, Porcini Mushrooms in Oil, Porcini Mushroom Powder, Basil" data-es="Fiordilatte, mezcla de setas, porcini en aceite, polvo de porcini deshidratados, albahaca" data-fr="Fiordilatte, melange de champignons, cepes a l'huile, poudre de cepes seches, basilic">Fiordilatte, Funghi misti, Fungo Porcino sott'olio, Polvere di Fungo Porcino, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-purple-200">
+                        <h3 class="font-bold text-lg text-gray-800">Mr. Wurstel</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Wurstel di Carne di bovino Presidio Slow Food e suino, Basilico" data-en="La Concettina Tomato, Fiordilatte from Monti Lattari, Sausages from Slow Food Presidium Beef and Pork, Basil" data-es="Tomate La Concettina, fiordilatte de los Monti Lattari, wurstel de carne de vacuno Presidio Slow Food y cerdo, albahaca" data-fr="Tomate La Concettina, fiordilatte des Monti Lattari, saucisse de boeuf (Presidio Slow Food) et porc, basilic">Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Wurstel di Carne di bovino Presidio Slow Food e suino, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-purple-200">
+                        <h3 class="font-bold text-lg text-gray-800">Torna pesto</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Fiordilatte dei Monti Lattari, Prosciutto Cotto Raspini, Patate al Forno, Gocce di Pesto di Pra', Basilico" data-en="Fiordilatte from Monti Lattari, Raspini Cooked Ham, Baked Potatoes, Pra' Pesto Drops, Basil" data-es="Fiordilatte de los Monti Lattari, jamon cocido Raspini, patatas al horno, gotas de Pesto di Pra', albahaca" data-fr="Fiordilatte des Monti Lattari, jambon cuit Raspini, pommes de terre roties, gouttes de Pesto di Pra', basilic">Fiordilatte dei Monti Lattari, Prosciutto Cotto Raspini, Patate al Forno, Gocce di Pesto di Pra', Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-purple-200">
+                        <h3 class="font-bold text-lg text-gray-800">Polpette a go go</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Parmigiano Reggiano DOP, Polpette di Carne di bovino Presidio Slow Food e suino, Basilico" data-en="La Concettina Tomato, Fiordilatte from Monti Lattari, Parmigiano Reggiano DOP, Meatballs from Slow Food Presidium Beef and Pork, Basil" data-es="Tomate La Concettina, fiordilatte de los Monti Lattari, Parmigiano Reggiano DOP, albondigas fritas (carne de vacuno Presidio Slow Food y cerdo), albahaca" data-fr="Tomate La Concettina, fiordilatte des Monti Lattari, Parmigiano Reggiano DOP, boulettes de viande frites (boeuf Presidio Slow Food et porc), basilic">Pomodoro La Concettina, Fiordilatte dei Monti Lattari, Parmigiano Reggiano DOP, Polpette di Carne di bovino Presidio Slow Food e suino, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-purple-200">
+                        <h3 class="font-bold text-lg text-gray-800">Fata Zucchina</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Fiordilatte dei Monti Lattari, Crema di Zucchine Fresche e Menta, Zucchine Fritte, Provolone del Monaco DOP, Pepe Macinato, Basilico" data-en="Fiordilatte from Monti Lattari, Fresh Zucchini and Mint Cream, Fried Zucchini, Provolone del Monaco DOP, Ground Pepper, Basil" data-es="Fiordilatte de los Monti Lattari, crema de calabacin y menta fresca, calabacin frito, Provolone del Monaco DOP, pimienta negra molida, albahaca" data-fr="Fiordilatte des Monti Lattari, creme de courgettes fraiches et menthe, courgettes frites, Provolone del Monaco DOP, poivre moulu, basilic">Fiordilatte dei Monti Lattari, Crema di Zucchine Fresche e Menta, Zucchine Fritte, Provolone del Monaco DOP, Pepe Macinato, Basilico</p>
+                    </div>
+                    <div class="menu-item bg-white rounded-xl p-5 border-2 border-purple-200">
+                        <h3 class="font-bold text-lg text-gray-800">Carciofunky</h3>
+                        <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Crema di carciofi, Fiordilatte dei Monti Lattari, Salsiccia Fresca, Rucola, Olive" data-en="Artichoke Cream, Fiordilatte from Monti Lattari, Fresh Sausage, Arugula, Olives" data-es="Crema de alcachofas, fiordilatte de los Monti Lattari, salchicha fresca, rucula, aceitunas" data-fr="Creme d'artichauts, fiordilatte des Monti Lattari, saucisse fraiche, roquette, olives">Crema di carciofi, Fiordilatte dei Monti Lattari, Salsiccia Fresca, Rucola, Olive</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PASTA SECTION -->
+        <section id="pasta" class="menu-section">
+            <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">
+                <span class="section-header" data-it="🍝 Pasta" data-en="🍝 Pasta" data-es="🍝 Pasta" data-fr="🍝 Pates">🍝 Pasta</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                    <h3 class="font-bold text-lg text-gray-800">Carbonara</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Mezze maniche, uova, pecorino romano, guanciale croccante, pepe nero" data-en="Mezze maniche, eggs, pecorino romano, crispy guanciale, black pepper" data-es="Mezze maniche, huevos, pecorino romano, guanciale crujiente, pimienta negra" data-fr="Mezze maniche, oeufs, pecorino romano, guanciale croustillant, poivre noir">Mezze maniche, uova, pecorino romano, guanciale croccante, pepe nero</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                    <h3 class="font-bold text-lg text-gray-800">Amatriciana</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Mezze maniche, pomodoro, pecorino romano, guanciale croccante, pepe nero" data-en="Mezze maniche, tomato, pecorino romano, crispy guanciale, black pepper" data-es="Mezze maniche, tomate, pecorino romano, guanciale crujiente, pimienta negra" data-fr="Mezze maniche, tomate, pecorino romano, guanciale croustillant, poivre noir">Mezze maniche, pomodoro, pecorino romano, guanciale croccante, pepe nero</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                    <h3 class="font-bold text-lg text-gray-800">Cacio e pepe</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Tonnarelli, pecorino romano, pepe nero" data-en="Tonnarelli, pecorino romano, black pepper" data-es="Tonnarelli, pecorino romano, pimienta negra" data-fr="Tonnarelli, pecorino romano, poivre noir">Tonnarelli, pecorino romano, pepe nero</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                    <h3 class="font-bold text-lg text-gray-800">Dolcevita</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Mezze maniche, pomodoro, stracciatella, pesto di Pra" data-en="Mezze maniche, tomato, stracciatella, Pra' pesto" data-es="Mezze maniche, tomate, stracciatella, pesto de Pra" data-fr="Mezze maniche, tomate, stracciatella, pesto de Pra">Mezze maniche, pomodoro, stracciatella, pesto di Pra</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-amber-200">
+                    <h3 class="font-bold text-lg text-gray-800">Ragu alla bolognese</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Mezze maniche al ragu alla bolognese" data-en="Mezze maniche with bolognese ragu" data-es="Mezze maniche con ragu a la bolonesa" data-fr="Mezze maniche au ragu a la bolognaise">Mezze maniche al ragu alla bolognese</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- INSALATE SECTION -->
+        <section id="insalate" class="menu-section">
+            <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">
+                <span class="section-header" data-it="🥗 Insalate e Piattini" data-en="🥗 Salads and Small Plates" data-es="🥗 Ensaladas y Platillos" data-fr="🥗 Salades et Petits Plats">🥗 Insalate e Piattini</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-green-200">
+                    <h3 class="font-bold text-lg text-gray-800">Kung fu pollo</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Misticanza, Pollo Marinato in Salsa di Soia, Scaglie di Grana Padano DOP, Tarallo Mandorlato, Senape al Miele e Salsa Yogurt" data-en="Mixed Greens, Chicken Marinated in Soy Sauce, Grana Padano DOP Shavings, Almond Tarallo, Honey Mustard and Yogurt Sauce" data-es="Mezcla de lechugas, pollo marinado en salsa de soja, lascas de Grana Padano DOP, tarallo de almendra, mostaza con miel y salsa de yogur" data-fr="Mesclun, poulet marine a la sauce soja, copeaux de Grana Padano DOP, taralli aux amandes, moutarde au miel et sauce yaourt">Misticanza, Pollo Marinato in Salsa di Soia, Scaglie di Grana Padano DOP, Tarallo Mandorlato, Senape al Miele e Salsa Yogurt</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-green-200">
+                    <h3 class="font-bold text-lg text-gray-800">Dillo all'avocado</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Misticanza, Carciofi, Pomodori Datterini, Olive, Granella di Pistacchio, Avocado, Olio EVO" data-en="Mixed Greens, Artichokes, Cherry Tomatoes, Olives, Crushed Pistachios, Avocado, Extra Virgin Olive Oil" data-es="Mezcla de lechugas, alcachofas, tomates datterini, aceitunas, granillo de pistacho, aguacate y aceite de oliva virgen extra" data-fr="Salade mesclun, artichauts, tomates datterini, olives, eclats de pistache, avocat, huile d'olive extra vierge">Misticanza, Carciofi, Pomodori Datterini, Olive, Granella di Pistacchio, Avocado, Olio EVO</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-green-200">
+                    <h3 class="font-bold text-lg text-gray-800">Myss feta</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Misticanza, Pomodorini Datterini, Tonno, Feta Greca DOP, Olive, Olio EVO" data-en="Mixed Greens, Cherry Tomatoes, Tuna, Greek Feta DOP, Olives, Extra Virgin Olive Oil" data-es="Mezcla de lechugas, tomates datterini, atun, feta griega DOP, aceitunas, aceite de oliva virgen extra" data-fr="Mesclun, tomates datterini, thon, feta grecque DOP, olives, huile d'olive extra vierge">Misticanza, Pomodorini Datterini, Tonno, Feta Greca DOP, Olive, Olio EVO</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-green-200">
+                    <h3 class="font-bold text-lg text-gray-800">Zuppa di legumi e cereali</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="con Salvia, Rosmarino e Olio EVO" data-en="with Sage, Rosemary and Extra Virgin Olive Oil" data-es="Sopa de legumbres y cereales con salvia, romero y aceite de oliva virgen extra" data-fr="Soupe de legumineuses et cereales a la sauge, romarin et huile d'olive extra vierge">con Salvia, Rosmarino e Olio EVO</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-green-200">
+                    <h3 class="font-bold text-lg text-gray-800">Burrata e pomodorini</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Burrata, Pomodorini Datterini, Misticanza, Pesto di Pra', Olio EVO" data-en="Burrata, Cherry Tomatoes, Mixed Greens, Pra' Pesto, Extra Virgin Olive Oil" data-es="Burrata, tomates datterini, mezcla de lechugas, Pesto di Pra', aceite de oliva virgen extra" data-fr="Burrata, tomates datterini, mesclun, Pesto di Pra', huile d'olive extra vierge">Burrata, Pomodorini Datterini, Misticanza, Pesto di Pra', Olio EVO</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-green-200">
+                    <h3 class="font-bold text-lg text-gray-800">Crudo e bufala</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Prosciutto Crudo di Parma, Mozzarella di Latte di Bufala La Cilentana, Misticanza, Pepe Macinato, Olio EVO" data-en="Parma Prosciutto Crudo, La Cilentana Buffalo Mozzarella, Mixed Greens, Ground Pepper, Extra Virgin Olive Oil" data-es="Jamon curado Raspini, mozzarella de bufala La Cilentana, mezcla de lechugas, pimienta negra molida, aceite de oliva virgen extra" data-fr="Jambon cru Raspini, mozzarella de bufflonne La Cilentana, mesclun, poivre noir moulu, huile d'olive extra vierge">Prosciutto Crudo di Parma, Mozzarella di Latte di Bufala La Cilentana, Misticanza, Pepe Macinato, Olio EVO</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FRITTI SECTION -->
+        <section id="fritti" class="menu-section">
+            <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">
+                <span class="section-header" data-it="🍟 Fritti" data-en="🍟 Fried" data-es="🍟 Fritos / Entrantes" data-fr="🍟 Fritures / Entrees">🍟 Fritti</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-6xl mx-auto">
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-orange-200">
+                    <h3 class="font-bold text-lg text-gray-800">Patatine fritte</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="con salse a scelta" data-en="with sauces of your choice" data-es="Patatas fritas" data-fr="Frites">con salse a scelta</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-orange-200">
+                    <h3 class="font-bold text-lg text-gray-800">Suppli al telefono</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Ragu e Mozzarella" data-en="Ragu and Mozzarella" data-es="Ragu de carne y mozzarella, croqueta de arroz rellena" data-fr="Ragu de viande et mozzarella">Ragu e Mozzarella</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-orange-200">
+                    <h3 class="font-bold text-lg text-gray-800">Suppli cacio e pepe</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Pecorino e Pepe" data-en="Pecorino and Pepper" data-es="Queso pecorino y pimienta negra, croqueta de arroz rellena" data-fr="Pecorino et poivre noir">Pecorino e Pepe</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-orange-200">
+                    <h3 class="font-bold text-lg text-gray-800">Crocchetta di patate</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Patate Rosse, Mozzarella, Prosciutto Cotto e Rosmarino" data-en="Red Potatoes, Mozzarella, Cooked Ham and Rosemary" data-es="Patatas rojas, mozzarella, jamon cocido y romero, croqueta frita" data-fr="Pommes de terre rouges, mozzarella, jambon cuit et romarin">Patate Rosse, Mozzarella, Prosciutto Cotto e Rosmarino</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-orange-200">
+                    <h3 class="font-bold text-lg text-gray-800">Crocchetta mortadella e pistacchio</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Mortadella Bologna IGP e Pesto di Pistacchio" data-en="Mortadella Bologna IGP and Pistachio Pesto" data-es="Nuestra Crocchetta di patate, con Mortadella Bologna IGP y pesto de pistacho" data-fr="Mortadella Bologna IGP et pesto de pistache">Mortadella Bologna IGP e Pesto di Pistacchio</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-orange-200">
+                    <h3 class="font-bold text-lg text-gray-800">Polpettine fritte</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Polpette di carne di bovino Presidio Slow Food e suino" data-en="Meatballs from Slow Food Presidium Beef and Pork" data-es="Albondigas fritas de carne - vacuno Presidio Slow Food y cerdo" data-fr="Boulettes de viande frites (boeuf Presidio Slow Food et porc)">Polpette di carne di bovino Presidio Slow Food e suino</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-orange-200">
+                    <h3 class="font-bold text-lg text-gray-800">Panelle</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="con sale, pepe e limone" data-en="with salt, pepper and lemon" data-es="Con sal, pimienta y limon" data-fr="Avec sel, poivre et citron">con sale, pepe e limone</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- DOLCI SECTION -->
+        <section id="dolci" class="menu-section">
+            <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">
+                <span class="section-header" data-it="🍰 Dolci" data-en="🍰 Desserts" data-es="🍰 Postres" data-fr="🍰 Desserts">🍰 Dolci</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-pink-200">
+                    <h3 class="font-bold text-lg text-gray-800 item-title" data-it="Tortino al cioccolato" data-en="Chocolate Lava Cake" data-es="Tortino de chocolate" data-fr="Moelleux au chocolat">Tortino al cioccolato</h3>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-pink-200">
+                    <h3 class="font-bold text-lg text-gray-800 item-title" data-it="Pizza alla Nutella" data-en="Nutella Pizza" data-es="Pizza con Nutella" data-fr="Pizza au Nutella">Pizza alla Nutella</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="con granella di pistacchio" data-en="with pistachio crumble" data-es="con granillo de pistacho" data-fr="avec eclats de pistache">con granella di pistacchio</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-pink-200">
+                    <h3 class="font-bold text-lg text-gray-800">Tiramisu</h3>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-pink-200">
+                    <h3 class="font-bold text-lg text-gray-800">Cheesecake</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Toppings: Nutella, amarena o pistacchio" data-en="Toppings: Nutella, sour cherry or pistachio" data-es="Toppings: Nutella, amarena o pistacho" data-fr="Toppings: Nutella, amarena ou pistache">Toppings: Nutella, amarena o pistacchio</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-pink-200">
+                    <h3 class="font-bold text-lg text-gray-800 item-title" data-it="Gelato al fiordilatte" data-en="Fiordilatte Gelato" data-es="Helado de fiordilatte" data-fr="Glace fiordilatte">Gelato al fiordilatte</h3>
+                    <p class="text-gray-600 text-sm mt-1 item-desc" data-it="Toppings: Nutella, amarena o pistacchio" data-en="Toppings: Nutella, sour cherry or pistachio" data-es="Toppings: Nutella, amarena o pistacho" data-fr="Toppings: Nutella, amarena ou pistache">Toppings: Nutella, amarena o pistacchio</p>
+                </div>
+                <div class="menu-item bg-white rounded-xl p-5 border-2 border-pink-200">
+                    <h3 class="font-bold text-lg text-gray-800 item-title" data-it="Sorbetto al limone" data-en="Lemon Sorbet" data-es="Sorbete de limon" data-fr="Sorbet au citron">Sorbetto al limone</h3>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 text-center">
+        <p class="text-lg font-semibold">Fradiavolo</p>
+        <p class="text-gray-400 text-sm mt-1">Pizza Contemporanea</p>
+        <p class="text-gray-500 text-xs mt-4">www.fradiavolo.com</p>
+    </footer>
+
+    <script>
+        let currentLang = 'it';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+
+            // Update language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('bg-red-600', 'text-white');
+                btn.classList.add('bg-gray-200');
+                if (btn.dataset.lang === lang) {
+                    btn.classList.remove('bg-gray-200');
+                    btn.classList.add('bg-red-600', 'text-white');
+                }
+            });
+
+            // Update section labels
+            document.querySelectorAll('.section-label').forEach(el => {
+                el.textContent = el.dataset[lang];
+            });
+
+            // Update pizza subcategory labels
+            document.querySelectorAll('.pizza-label').forEach(el => {
+                el.textContent = el.dataset[lang];
+            });
+
+            // Update subsection titles
+            document.querySelectorAll('.subsection-title').forEach(el => {
+                el.textContent = el.dataset[lang];
+            });
+
+            // Update section headers
+            document.querySelectorAll('.section-header').forEach(el => {
+                el.textContent = el.dataset[lang];
+            });
+
+            // Update item descriptions
+            document.querySelectorAll('.item-desc').forEach(el => {
+                if (el.dataset[lang]) {
+                    el.textContent = el.dataset[lang];
+                }
+            });
+
+            // Update item titles (for desserts)
+            document.querySelectorAll('.item-title').forEach(el => {
+                if (el.dataset[lang]) {
+                    el.textContent = el.dataset[lang];
+                }
+            });
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.menu-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update tab styles
+            document.querySelectorAll('.section-tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.classList.add('bg-white');
+                if (tab.dataset.section === sectionId) {
+                    tab.classList.add('active');
+                    tab.classList.remove('bg-white');
+                }
+            });
+
+            // Reset pizza subsections when switching to pizze
+            if (sectionId === 'pizze') {
+                showPizzaSubsection('tradizionali');
+            }
+        }
+
+        function showPizzaSubsection(subsectionId) {
+            // Hide all pizza subsections
+            document.querySelectorAll('.pizza-subsection').forEach(sub => {
+                sub.classList.remove('active');
+            });
+
+            // Show selected subsection
+            document.getElementById(subsectionId).classList.add('active');
+
+            // Update subcategory tab styles
+            document.querySelectorAll('.subcategory-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.pizza === subsectionId) {
+                    tab.classList.add('active');
+                }
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setLanguage('it');
+            showSection('pizze');
+        });
+    </script>
 </body>
 </html>
