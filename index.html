@@ -6,44 +6,78 @@
     <title>Menu Fradiavolo | Pizza Contemporanea</title>
     <meta name="description" content="Scopri il menu Fradiavolo: pizze tradizionali, diavole piccanti, pop creative, pasta e fritti. Pizza contemporanea con ingredienti DOP.">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'fra-red': '#C8102E',
+                        'fra-yellow': '#FFD700',
+                        'fra-cream': '#FFF8E7',
+                        'fra-black': '#1a1a1a',
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background-color: #FFF8E7; }
+        .font-bebas { font-family: 'Bebas Neue', sans-serif; }
         .section-tab { transition: all 0.2s ease; }
-        .section-tab.active { background-color: #dc2626; color: white; }
-        .section-tab:not(.active):hover { background-color: #fef3c7; }
+        .section-tab.active { background-color: #FFD700; color: #1a1a1a; }
+        .section-tab:not(.active):hover { background-color: #FFF8E7; }
         .subcategory-tab { transition: all 0.2s ease; }
-        .subcategory-tab.active { background-color: #fbbf24; color: #1f2937; font-weight: 600; }
-        .subcategory-tab:not(.active):hover { background-color: #fef3c7; }
+        .subcategory-tab.active { background-color: #C8102E; color: white; font-weight: 600; }
+        .subcategory-tab:not(.active):hover { background-color: #FFF8E7; }
         .menu-section { display: none; }
         .menu-section.active { display: block; }
         .pizza-subsection { display: none; }
         .pizza-subsection.active { display: block; }
         .menu-item { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .menu-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .menu-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .text-stroke { -webkit-text-stroke: 1px #1a1a1a; }
+        .marquee-container { overflow: hidden; white-space: nowrap; }
+        .marquee-content { display: inline-block; animation: marquee 20s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     </style>
 </head>
-<body class="bg-amber-50">
+<body class="bg-fra-cream">
     <!-- Header -->
-    <header class="bg-red-600 text-white py-8 text-center border-b-4 border-black">
-        <h1 class="text-5xl font-bold uppercase tracking-wide">Menu Fradiavolo</h1>
-        <p class="text-xl mt-2 opacity-90">Pizza Contemporanea</p>
+    <header class="h-[35vh] border-b-2 border-solid border-black bg-cover bg-center bg-no-repeat flex flex-col justify-center items-center" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://fradiavolopizzeria.com/img/head-menu2.jpg');">
+        <h1 class="font-bebas text-7xl md:text-9xl uppercase tracking-wide text-white text-center px-4" style="text-shadow: 4px 4px 8px rgba(0,0,0,0.6);">
+            <span class="header-title" data-it="il nostro menu" data-en="our menu" data-es="nuestro menu" data-fr="notre menu">il nostro menu</span>
+        </h1>
+        <p class="text-sm lg:text-2xl mt-4 text-white text-center px-4 uppercase" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+            <span class="header-subtitle1" data-it="Il nostro menu cambia e si aggiorna sempre:" data-en="Our menu is always changing and updating:" data-es="Nuestro menu cambia y se actualiza siempre:" data-fr="Notre menu change et se met a jour constamment:">Il nostro menu cambia e si aggiorna sempre:</span><br>
+            <span class="header-subtitle2" data-it="scegli tra cinque impasti diversi, pizze classiche e sempre nuove." data-en="choose from five different doughs, classic and new pizzas." data-es="elige entre cinco masas diferentes, pizzas clasicas y siempre nuevas." data-fr="choisissez parmi cinq pates differentes, pizzas classiques et toujours nouvelles.">scegli tra cinque impasti diversi, pizze classiche e sempre nuove.</span>
+        </p>
     </header>
 
+    <!-- Marquee Banner -->
+    <div class="bg-fra-cream border-b-2 border-black py-2 marquee-container">
+        <div class="marquee-content font-bebas text-2xl md:text-4xl text-fra-black uppercase">
+            <span class="mx-8 marquee-text" data-it="Attenzione, i piatti non sono presenti in tutti gli store. Consulta il menu nel tuo punto vendita" data-en="Attention, dishes may not be available in all stores. Check the menu at your location" data-es="Atencion, los platos no estan presentes en todas las tiendas. Consulta el menu en tu punto de venta" data-fr="Attention, les plats ne sont pas disponibles dans tous les magasins. Consultez le menu dans votre point de vente">Attenzione, i piatti non sono presenti in tutti gli store. Consulta il menu nel tuo punto vendita</span>
+            <span class="mx-8">•</span>
+            <span class="mx-8 marquee-text" data-it="Attenzione, i piatti non sono presenti in tutti gli store. Consulta il menu nel tuo punto vendita" data-en="Attention, dishes may not be available in all stores. Check the menu at your location" data-es="Atencion, los platos no estan presentes en todas las tiendas. Consulta el menu en tu punto de venta" data-fr="Attention, les plats ne sont pas disponibles dans tous les magasins. Consultez le menu dans votre point de vente">Attenzione, i piatti non sono presenti in tutti gli store. Consulta il menu nel tuo punto vendita</span>
+            <span class="mx-8">•</span>
+        </div>
+    </div>
+
     <!-- Language Selector -->
-    <div class="bg-amber-100 border-b-2 border-black py-3 px-4">
+    <div class="bg-fra-cream border-b-2 border-black py-3 px-4">
         <div class="max-w-7xl mx-auto flex justify-center gap-2">
-            <button onclick="setLanguage('it')" class="lang-btn px-4 py-2 rounded-lg font-medium text-sm bg-red-600 text-white" data-lang="it">Italiano</button>
-            <button onclick="setLanguage('en')" class="lang-btn px-4 py-2 rounded-lg font-medium text-sm bg-gray-200 hover:bg-gray-300" data-lang="en">English</button>
-            <button onclick="setLanguage('es')" class="lang-btn px-4 py-2 rounded-lg font-medium text-sm bg-gray-200 hover:bg-gray-300" data-lang="es">Espanol</button>
-            <button onclick="setLanguage('fr')" class="lang-btn px-4 py-2 rounded-lg font-medium text-sm bg-gray-200 hover:bg-gray-300" data-lang="fr">Francais</button>
+            <button onclick="setLanguage('it')" class="lang-btn px-4 py-2 rounded-lg font-medium text-sm bg-fra-red text-white" data-lang="it">Italiano</button>
+            <button onclick="setLanguage('en')" class="lang-btn px-4 py-2 rounded-lg font-medium text-sm bg-white border border-gray-300 hover:bg-fra-yellow" data-lang="en">English</button>
+            <button onclick="setLanguage('es')" class="lang-btn px-4 py-2 rounded-lg font-medium text-sm bg-white border border-gray-300 hover:bg-fra-yellow" data-lang="es">Espanol</button>
+            <button onclick="setLanguage('fr')" class="lang-btn px-4 py-2 rounded-lg font-medium text-sm bg-white border border-gray-300 hover:bg-fra-yellow" data-lang="fr">Francais</button>
         </div>
     </div>
 
     <!-- Category Tabs -->
-    <nav class="bg-amber-200 border-b-2 border-black sticky top-0 z-50">
+    <nav class="bg-fra-red border-b-2 border-black sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3">
             <div class="flex flex-wrap justify-center gap-2">
                 <button onclick="showSection('pizze')" class="section-tab active px-4 py-2 rounded-lg font-semibold text-sm uppercase" data-section="pizze">
@@ -354,12 +388,51 @@
 
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8 text-center">
-        <p class="text-lg font-semibold">Fradiavolo</p>
-        <p class="text-gray-400 text-sm mt-1">Pizza Contemporanea</p>
-        <p class="text-gray-500 text-xs mt-4">www.fradiavolo.com</p>
-    </footer>
+    <!-- IMPASTI SECTION -->
+    <section class="bg-fra-yellow px-6 md:px-10 pt-6 pb-8 uppercase text-fra-black border-y-2 border-black">
+        <h2 class="font-bebas text-5xl md:text-6xl text-center mb-8 text-fra-black">
+            <span class="impasti-title" data-it="I Nostri Impasti" data-en="Our Doughs" data-es="Nuestras Masas" data-fr="Nos Pates">I Nostri Impasti</span>
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-6xl mx-auto">
+            <div class="bg-white rounded-xl p-4 text-center border-2 border-fra-black">
+                <img src="https://fradiavolopizzeria.com/img/impasti/Classico.png" alt="Classico" class="w-20 h-20 mx-auto mb-2 object-contain" onerror="this.style.display='none'">
+                <h3 class="font-bold text-lg impasti-name" data-it="Classico" data-en="Classic" data-es="Clasico" data-fr="Classique">Classico</h3>
+                <p class="text-xs text-gray-600 mt-1 normal-case impasti-desc" data-it="Un impasto di farina di grano tenero per una pizza molto profumata e saporita." data-en="A soft wheat flour dough for a very fragrant and tasty pizza." data-es="Una masa de harina de trigo blando para una pizza muy aromatica y sabrosa." data-fr="Une pate de farine de ble tendre pour une pizza tres parfumee et savoureuse.">Un impasto di farina di grano tenero per una pizza molto profumata e saporita.</p>
+            </div>
+            <div class="bg-white rounded-xl p-4 text-center border-2 border-fra-black">
+                <img src="https://fradiavolopizzeria.com/img/impasti/Sottile.png" alt="Sottile" class="w-20 h-20 mx-auto mb-2 object-contain" onerror="this.style.display='none'">
+                <h3 class="font-bold text-lg impasti-name" data-it="Sottile" data-en="Thin" data-es="Fina" data-fr="Fine">Sottile</h3>
+                <p class="text-xs text-gray-600 mt-1 normal-case impasti-desc" data-it="Con farina di grano tenero per una pizza leggera, scrocchiarella, dal bordo basso e sottile." data-en="With soft wheat flour for a light, crispy pizza with a low, thin crust." data-es="Con harina de trigo blando para una pizza ligera, crujiente, de borde bajo y fino." data-fr="Avec farine de ble tendre pour une pizza legere, croustillante, a bord bas et fin.">Con farina di grano tenero per una pizza leggera, scrocchiarella, dal bordo basso e sottile.</p>
+            </div>
+            <div class="bg-white rounded-xl p-4 text-center border-2 border-fra-black">
+                <img src="https://fradiavolopizzeria.com/img/impasti/Nero.png" alt="Nero" class="w-20 h-20 mx-auto mb-2 object-contain" onerror="this.style.display='none'">
+                <h3 class="font-bold text-lg impasti-name" data-it="Nero" data-en="Black" data-es="Negro" data-fr="Noir">Nero</h3>
+                <p class="text-xs text-gray-600 mt-1 normal-case impasti-desc" data-it="Il sorprendente impasto con carbone vegetale in polvere che regala una pizza leggera e digeribile." data-en="The surprising dough with vegetable charcoal powder for a light and digestible pizza." data-es="La sorprendente masa con carbon vegetal en polvo que regala una pizza ligera y digerible." data-fr="La pate surprenante au charbon vegetal en poudre pour une pizza legere et digestible.">Il sorprendente impasto con carbone vegetale in polvere che regala una pizza leggera e digeribile.</p>
+            </div>
+            <div class="bg-white rounded-xl p-4 text-center border-2 border-fra-black">
+                <img src="https://fradiavolopizzeria.com/img/impasti/Integrale.png" alt="Integrale" class="w-20 h-20 mx-auto mb-2 object-contain" onerror="this.style.display='none'">
+                <h3 class="font-bold text-lg impasti-name" data-it="Integrale" data-en="Whole Wheat" data-es="Integral" data-fr="Complet">Integrale</h3>
+                <p class="text-xs text-gray-600 mt-1 normal-case impasti-desc" data-it="Una miscela di farina integrale di grano, semi di lino, crusca di grano e farina di avena." data-en="A blend of whole wheat flour, flax seeds, wheat bran and oat flour." data-es="Una mezcla de harina integral de trigo, semillas de lino, salvado de trigo y harina de avena." data-fr="Un melange de farine complete de ble, graines de lin, son de ble et farine d'avoine.">Una miscela di farina integrale di grano, semi di lino, crusca di grano e farina di avena.</p>
+            </div>
+            <div class="bg-white rounded-xl p-4 text-center border-2 border-fra-black">
+                <img src="https://fradiavolopizzeria.com/img/impasti/Senza%20frumento.png" alt="Senza frumento" class="w-20 h-20 mx-auto mb-2 object-contain" onerror="this.style.display='none'">
+                <h3 class="font-bold text-lg impasti-name" data-it="Senza frumento" data-en="Wheat-free" data-es="Sin trigo" data-fr="Sans ble">Senza frumento</h3>
+                <p class="text-xs text-gray-600 mt-1 normal-case impasti-desc" data-it="Con farine prive di glutine, delicato. Non adatto ai celiaci." data-en="With gluten-free flours, delicate. Not suitable for celiacs." data-es="Con harinas sin gluten, delicado. No apto para celiacos." data-fr="Avec farines sans gluten, delicat. Non adapte aux celiaques.">Con farine prive di glutine, delicato. Non adatto ai celiaci.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee Banner Bottom -->
+    <div class="bg-fra-cream border-b-2 border-black py-3 marquee-container">
+        <div class="marquee-content font-bebas text-4xl md:text-6xl text-fra-black uppercase">
+            <span class="mx-8">eat pizza make love</span>
+            <span class="mx-8">eat pizza make love</span>
+            <span class="mx-8">eat pizza make love</span>
+            <span class="mx-8">eat pizza make love</span>
+            <span class="mx-8">eat pizza make love</span>
+            <span class="mx-8">eat pizza make love</span>
+        </div>
+    </div>
 
     <script>
         let currentLang = 'it';
@@ -369,12 +442,23 @@
 
             // Update language buttons
             document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('bg-red-600', 'text-white');
-                btn.classList.add('bg-gray-200');
+                btn.classList.remove('bg-fra-red', 'text-white');
+                btn.classList.add('bg-white', 'border', 'border-gray-300');
                 if (btn.dataset.lang === lang) {
-                    btn.classList.remove('bg-gray-200');
-                    btn.classList.add('bg-red-600', 'text-white');
+                    btn.classList.remove('bg-white', 'border', 'border-gray-300');
+                    btn.classList.add('bg-fra-red', 'text-white');
                 }
+            });
+
+            // Update header text
+            document.querySelectorAll('.header-title').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.header-subtitle1').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.header-subtitle2').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
             });
 
             // Update section labels
@@ -409,6 +493,22 @@
                 if (el.dataset[lang]) {
                     el.textContent = el.dataset[lang];
                 }
+            });
+
+            // Update impasti section
+            document.querySelectorAll('.impasti-title').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.impasti-name').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.impasti-desc').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+
+            // Update marquee text
+            document.querySelectorAll('.marquee-text').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
             });
         }
 
