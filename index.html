@@ -42,6 +42,36 @@
         .marquee-container { overflow: hidden; white-space: nowrap; }
         .marquee-content { display: inline-block; animation: marquee 20s linear infinite; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        /* Modal Styles */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; overflow-y: auto; }
+        .modal-overlay.active { display: flex; justify-content: center; align-items: flex-start; padding: 20px; }
+        .modal-content { background: #FFF8E7; border-radius: 16px; max-width: 1000px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; margin: auto; }
+        .modal-header { background: linear-gradient(135deg, #C8102E 0%, #9a1830 100%); color: white; padding: 30px 20px; text-align: center; border-radius: 16px 16px 0 0; position: sticky; top: 0; z-index: 10; }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: #1a1a1a; color: white; border: 2px solid white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .modal-close:hover { background: white; color: #1a1a1a; }
+        .modal-body { padding: 24px; }
+        .allergen-section { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .allergen-section h3 { color: #C8102E; font-size: 1.1rem; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #C8102E; }
+        .allergen-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        @media (min-width: 600px) { .allergen-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 900px) { .allergen-grid { grid-template-columns: repeat(3, 1fr); } }
+        .allergen-card { background: #FFF8E7; padding: 12px; border-radius: 8px; border-left: 3px solid #C8102E; }
+        .allergen-card strong { color: #C8102E; display: block; margin-bottom: 4px; font-size: 0.85rem; }
+        .allergen-card p { font-size: 0.75rem; color: #555; margin: 0; }
+        .impasto-card { background: #FFF8E7; padding: 12px; border-radius: 8px; margin-bottom: 8px; }
+        .impasto-card strong { color: #C8102E; }
+        .product-allergen-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        @media (min-width: 500px) { .product-allergen-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 768px) { .product-allergen-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1000px) { .product-allergen-grid { grid-template-columns: repeat(4, 1fr); } }
+        .product-allergen-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; }
+        .product-allergen-card .name { font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; }
+        .product-allergen-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+        .product-allergen-tag { background: #ffebee; color: #C8102E; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 500; }
+        .category-header { background: #C8102E; color: white; padding: 10px 14px; border-radius: 8px; margin: 16px 0 10px 0; font-weight: 600; font-size: 0.9rem; grid-column: 1 / -1; }
+        .no-allergen { color: #4caf50; font-size: 0.75rem; font-style: italic; }
+        .notice-box { background: #fff8e1; border: 1px solid #ffcc02; border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 0.85rem; }
+        .notice-box strong { color: #8c6d00; }
     </style>
 </head>
 <body class="bg-fra-cream">
@@ -423,6 +453,23 @@
         </div>
     </section>
 
+    <!-- Allergen CTA Section -->
+    <section class="bg-white px-6 md:px-10 py-10 text-center border-y-2 border-black">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-4xl mb-4">
+                <span>&#9888;</span>
+            </div>
+            <h2 class="font-bebas text-3xl md:text-4xl text-fra-black mb-4">
+                <span class="allergen-title" data-it="Informazioni sugli Allergeni" data-en="Allergen Information" data-es="Informacion sobre Alergenos" data-fr="Informations sur les Allergenes">Informazioni sugli Allergeni</span>
+            </h2>
+            <p class="text-gray-600 text-sm md:text-base mb-6 max-w-xl mx-auto allergen-desc" data-it="Per informazioni dettagliate su allergeni e intolleranze alimentari, consulta il nostro libretto degli allergeni o chiedi al nostro personale." data-en="For detailed information on allergens and food intolerances, please check our allergen booklet or ask our staff." data-es="Para informacion detallada sobre alergenos e intolerancias alimentarias, consulta nuestro libro de alergenos o pregunta al personal." data-fr="Pour des informations detaillees sur les allergenes et intolerances alimentaires, consultez notre livret des allergenes ou demandez a notre personnel.">Per informazioni dettagliate su allergeni e intolleranze alimentari, consulta il nostro libretto degli allergeni o chiedi al nostro personale.</p>
+            <button onclick="openAllergenModal()" class="inline-block bg-fra-red hover:bg-red-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200 uppercase tracking-wide text-sm cursor-pointer border-none">
+                <span class="allergen-cta-btn" data-it="Consulta il Libretto Allergeni" data-en="View Allergen Booklet" data-es="Consultar Libro de Alergenos" data-fr="Consulter le Livret Allergenes">Consulta il Libretto Allergeni</span>
+            </button>
+            <p class="text-xs text-gray-500 mt-4 allergen-staff" data-it="Il nostro personale e a disposizione per qualsiasi informazione sugli ingredienti." data-en="Our staff is available for any information about ingredients." data-es="Nuestro personal esta disponible para cualquier informacion sobre los ingredientes." data-fr="Notre personnel est a votre disposition pour toute information sur les ingredients.">Il nostro personale e a disposizione per qualsiasi informazione sugli ingredienti.</p>
+        </div>
+    </section>
+
     <!-- Marquee Banner Bottom -->
     <div class="bg-fra-cream border-b-2 border-black py-3 marquee-container">
         <div class="marquee-content font-bebas text-4xl md:text-6xl text-fra-black uppercase">
@@ -432,6 +479,124 @@
             <span class="mx-8">eat pizza make love</span>
             <span class="mx-8">eat pizza make love</span>
             <span class="mx-8">eat pizza make love</span>
+        </div>
+    </div>
+
+    <!-- Allergen Modal -->
+    <div id="allergenModal" class="modal-overlay" onclick="closeAllergenModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeAllergenModal()">&times;</button>
+                <h2 class="font-bebas text-2xl md:text-3xl mb-2 modal-title" data-it="Libretto degli Allergeni" data-en="Allergen Booklet" data-es="Libro de Alergenos" data-fr="Livret des Allergenes">Libretto degli Allergeni</h2>
+                <div class="text-xl font-bold">FRADIAVOLO</div>
+                <div class="text-xs opacity-80 mt-2">FRAGESA S.R.L. - Via Mazzini, 60/A - 10123 Torino</div>
+            </div>
+            <div class="modal-body">
+                <!-- 14 Allergeni -->
+                <div class="allergen-section">
+                    <h3 class="modal-section-title" data-it="I 14 Allergeni Alimentari" data-en="The 14 Food Allergens" data-es="Los 14 Alergenos Alimentarios" data-fr="Les 14 Allergenes Alimentaires">I 14 Allergeni Alimentari</h3>
+                    <div class="allergen-grid">
+                        <div class="allergen-card"><strong class="modal-allergen-name" data-it="GLUTINE" data-en="GLUTEN" data-es="GLUTEN" data-fr="GLUTEN">GLUTINE</strong><p class="modal-allergen-desc" data-it="Cereali, grano, segale, orzo, avena, farro, kamut" data-en="Cereals, wheat, rye, barley, oats, spelt, kamut" data-es="Cereales, trigo, centeno, cebada, avena, espelta, kamut" data-fr="Cereales, ble, seigle, orge, avoine, epeautre, kamut">Cereali, grano, segale, orzo, avena, farro, kamut</p></div>
+                        <div class="allergen-card"><strong class="modal-allergen-name" data-it="CROSTACEI" data-en="CRUSTACEANS" data-es="CRUSTACEOS" data-fr="CRUSTACES">CROSTACEI</strong><p class="modal-allergen-desc" data-it="Gamberi, scampi, granchi e simili" data-en="Shrimp, prawns, crabs and similar" data-es="Gambas, langostinos, cangrejos y similares" data-fr="Crevettes, langoustines, crabes et similaires">Gamberi, scampi, granchi e simili</p></div>
+                        <div class="allergen-card"><strong class="modal-allergen-name" data-it="UOVA" data-en="EGGS" data-es="HUEVOS" data-fr="OEUFS">UOVA</strong><p class="modal-allergen-desc" data-it="Uova e derivati: maionese, pasta all'uovo" data-en="Eggs and derivatives: mayonnaise, egg pasta" data-es="Huevos y derivados: mayonesa, pasta al huevo" data-fr="Oeufs et derives: mayonnaise, pates aux oeufs">Uova e derivati: maionese, pasta all'uovo</p></div>
+                        <div class="allergen-card"><strong class="modal-allergen-name" data-it="PESCE" data-en="FISH" data-es="PESCADO" data-fr="POISSON">PESCE</strong><p class="modal-allergen-desc" data-it="Prodotti con pesce, anche in piccole percentuali" data-en="Products with fish, even in small amounts" data-es="Productos con pescado, incluso en pequenas cantidades" data-fr="Produits avec poisson, meme en petites quantites">Prodotti con pesce, anche in piccole percentuali</p></div>
+                        <div class="allergen-card"><strong class="modal-allergen-name" data-it="ARACHIDI" data-en="PEANUTS" data-es="CACAHUETES" data-fr="ARACHIDES">ARACHIDI</strong><p class="modal-allergen-desc" data-it="Creme e condimenti, anche in piccole dosi" data-en="Creams and dressings, even in small doses" data-es="Cremas y condimentos, incluso en pequenas dosis" data-fr="Cremes et assaisonnements, meme en petites doses">Creme e condimenti, anche in piccole dosi</p></div>
+                        <div class="allergen-card"><strong class="modal-allergen-name" data-it="SOIA" data-en="SOY" data-es="SOJA" data-fr="SOJA">SOIA</strong><p class="modal-allergen-desc" data-it="Latte di soia, tofu, spaghetti di soia" data-en="Soy milk, tofu, soy noodles" data-es="Leche de soja, tofu, fideos de soja" data-fr="Lait de soja, tofu, nouilles de soja">Latte di soia, tofu, spaghetti di soia</p></div>
+                        <div class="allergen-card"><strong class="modal-allergen-name" data-it="LATTE" data-en="MILK" data-es="LECHE" data-fr="LAIT">LATTE</strong><p class="modal-allergen-desc" data-it="Yogurt, biscotti, torte, gelato e creme" data-en="Yogurt, biscuits, cakes, ice cream and creams" data-es="Yogur, galletas, tartas, helado y cremas" data-fr="Yaourt, biscuits, gateaux, glaces et cremes">Yogurt, biscotti, torte, gelato e creme</p></div>
+                        <div class="allergen-card"><strong class="modal-allergen-name" data-it="FRUTTA A GUSCIO" data-en="TREE NUTS" data-es="FRUTOS SECOS" data-fr="FRUITS A COQUE">FRUTTA A GUSCIO</strong><p class="modal-allergen-desc" data-it="Mandorle, nocciole, noci, anacardi, pistacchi" data-en="Almonds, hazelnuts, walnuts, cashews, pistachios" data-es="Almendras, avellanas, nueces, anacardos, pistachos" data-fr="Amandes, noisettes, noix, noix de cajou, pistaches">Mandorle, nocciole, noci, anacardi, pistacchi</p></div>
+                        <div class="allergen-card"><strong class="modal-allergen-name" data-it="SEDANO" data-en="CELERY" data-es="APIO" data-fr="CELERI">SEDANO</strong><p class="modal-allergen-desc" data-it="In preparati per zuppe, salse e concentrati" data-en="In soup preparations, sauces and concentrates" data-es="En preparados para sopas, salsas y concentrados" data-fr="Dans les preparations pour soupes, sauces et concentres">In preparati per zuppe, salse e concentrati</p></div>
+                        <div class="allergen-card"><strong class="modal-allergen-name" data-it="SENAPE" data-en="MUSTARD" data-es="MOSTAZA" data-fr="MOUTARDE">SENAPE</strong><p class="modal-allergen-desc" data-it="Presente in salse e condimenti, mostarda" data-en="Present in sauces and dressings, mustard" data-es="Presente en salsas y condimentos, mostaza" data-fr="Present dans les sauces et assaisonnements, moutarde">Presente in salse e condimenti, mostarda</p></div>
+                        <div class="allergen-card"><strong class="modal-allergen-name" data-it="SESAMO" data-en="SESAME" data-es="SESAMO" data-fr="SESAME">SESAMO</strong><p class="modal-allergen-desc" data-it="Semi interi per il pane, farine" data-en="Whole seeds for bread, flours" data-es="Semillas enteras para pan, harinas" data-fr="Graines entieres pour pain, farines">Semi interi per il pane, farine</p></div>
+                        <div class="allergen-card"><strong class="modal-allergen-name" data-it="SOLFITI" data-en="SULPHITES" data-es="SULFITOS" data-fr="SULFITES">SOLFITI</strong><p class="modal-allergen-desc" data-it="Conservanti in prodotti ittici, vino" data-en="Preservatives in fish products, wine" data-es="Conservantes en productos de pescado, vino" data-fr="Conservateurs dans produits de la mer, vin">Conservanti in prodotti ittici, vino</p></div>
+                        <div class="allergen-card"><strong class="modal-allergen-name" data-it="LUPINI" data-en="LUPIN" data-es="ALTRAMUCES" data-fr="LUPIN">LUPINI</strong><p class="modal-allergen-desc" data-it="In cibi vegan: arrosti, salamini, farine" data-en="In vegan foods: roasts, salamis, flours" data-es="En alimentos veganos: asados, salchichas, harinas" data-fr="Dans aliments vegans: rotis, saucissons, farines">In cibi vegan: arrosti, salamini, farine</p></div>
+                        <div class="allergen-card"><strong class="modal-allergen-name" data-it="MOLLUSCHI" data-en="MOLLUSCS" data-es="MOLUSCOS" data-fr="MOLLUSQUES">MOLLUSCHI</strong><p class="modal-allergen-desc" data-it="Cozze, vongole, ostriche, calamari, seppie" data-en="Mussels, clams, oysters, squid, cuttlefish" data-es="Mejillones, almejas, ostras, calamares, sepias" data-fr="Moules, palourdes, huitres, calamars, seiches">Cozze, vongole, ostriche, calamari, seppie</p></div>
+                    </div>
+                </div>
+
+                <!-- Impasti -->
+                <div class="allergen-section">
+                    <h3 class="modal-section-title" data-it="Gli Impasti" data-en="The Doughs" data-es="Las Masas" data-fr="Les Pates">Gli Impasti</h3>
+                    <div class="notice-box">
+                        <strong class="modal-notice-title" data-it="Avviso:" data-en="Notice:" data-es="Aviso:" data-fr="Avis:">Avviso:</strong> <span class="modal-notice-text" data-it="Si invitano i clienti a segnalare al personale qualsiasi intolleranza o allergia." data-en="Customers are invited to inform staff of any intolerance or allergy." data-es="Se invita a los clientes a informar al personal de cualquier intolerancia o alergia." data-fr="Les clients sont invites a signaler au personnel toute intolerance ou allergie.">Si invitano i clienti a segnalare al personale qualsiasi intolleranza o allergia.</span>
+                    </div>
+                    <div class="impasto-card"><strong>IMPASTO CLASSICO:</strong> <span class="modal-impasto-desc" data-it="Farina, lievito" data-en="Flour, yeast" data-es="Harina, levadura" data-fr="Farine, levure">Farina, lievito</span></div>
+                    <div class="impasto-card"><strong>IMPASTO INTEGRALE:</strong> <span class="modal-impasto-desc" data-it="Farina integrale, cereali misti, lievito, soia" data-en="Whole wheat flour, mixed cereals, yeast, soy" data-es="Harina integral, cereales mixtos, levadura, soja" data-fr="Farine complete, cereales mixtes, levure, soja">Farina integrale, cereali misti, lievito, soia</span></div>
+                    <div class="impasto-card"><strong>IMPASTO AL CARBONE VEGETALE:</strong> <span class="modal-impasto-desc" data-it="Farina, carbone vegetale in polvere, lievito" data-en="Flour, vegetable charcoal powder, yeast" data-es="Harina, carbon vegetal en polvo, levadura" data-fr="Farine, charbon vegetal en poudre, levure">Farina, carbone vegetale in polvere, lievito</span></div>
+                    <div class="impasto-card"><strong>IMPASTO SENZA FRUMENTO:</strong> <span class="modal-impasto-desc" data-it="Amido di mais, olio EVO, farina di quinoa, lievito madre di riso" data-en="Corn starch, EVO oil, quinoa flour, rice sourdough" data-es="Almidon de maiz, aceite EVO, harina de quinoa, levadura madre de arroz" data-fr="Amidon de mais, huile EVO, farine de quinoa, levain de riz">Amido di mais, olio EVO, farina di quinoa, lievito madre di riso</span></div>
+                    <div class="impasto-card"><strong>IMPASTO SOTTILE:</strong> <span class="modal-impasto-desc" data-it="Farina, lievito" data-en="Flour, yeast" data-es="Harina, levadura" data-fr="Farine, levure">Farina, lievito</span></div>
+                </div>
+
+                <!-- Allergeni per Prodotto -->
+                <div class="allergen-section">
+                    <h3 class="modal-section-title" data-it="Allergeni per Prodotto" data-en="Allergens by Product" data-es="Alergenos por Producto" data-fr="Allergenes par Produit">Allergeni per Prodotto</h3>
+                    <div class="product-allergen-grid">
+                        <!-- PIZZE -->
+                        <div class="category-header modal-cat-header" data-it="PIZZE" data-en="PIZZAS" data-es="PIZZAS" data-fr="PIZZAS">PIZZE</div>
+                        <div class="product-allergen-card"><div class="name">Margherita</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Margherita Piu</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Bufala</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Marinara</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Napoli</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-pesce" data-it="Pesce" data-en="Fish" data-es="Pescado" data-fr="Poisson">Pesce</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Capricciosa</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Prosciutto Cotto</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Prosciutto Crudo</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Ortolana</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Salsiccia e Friarielli</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-solfiti" data-it="Solfiti" data-en="Sulphites" data-es="Sulfitos" data-fr="Sulfites">Solfiti</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Fradiavolo</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Fradiavolissima</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Pepperoni</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Li Mortazza Tua</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-frutta" data-it="Frutta a guscio" data-en="Tree nuts" data-es="Frutos secos" data-fr="Fruits a coque">Frutta a guscio</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Gorgo'N'Roll</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Mr. Bean</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Stranger Chips</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Torna Pesto</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-frutta" data-it="Frutta a guscio" data-en="Tree nuts" data-es="Frutos secos" data-fr="Fruits a coque">Frutta a guscio</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Polpette a Go Go</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-uova" data-it="Uova" data-en="Eggs" data-es="Huevos" data-fr="Oeufs">Uova</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Fata Zucchina</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Carciofunky</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+
+                        <!-- FRITTI -->
+                        <div class="category-header modal-cat-header" data-it="ANTIPASTI E FRITTI" data-en="STARTERS AND FRIED" data-es="ENTRANTES Y FRITOS" data-fr="ENTREES ET FRITURES">ANTIPASTI E FRITTI</div>
+                        <div class="product-allergen-card"><div class="name">Suppli al Telefono</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-uova" data-it="Uova" data-en="Eggs" data-es="Huevos" data-fr="Oeufs">Uova</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Suppli Cacio e Pepe</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-uova" data-it="Uova" data-en="Eggs" data-es="Huevos" data-fr="Oeufs">Uova</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Crocchetta di Patate</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-uova" data-it="Uova" data-en="Eggs" data-es="Huevos" data-fr="Oeufs">Uova</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Crocchetta Mortadella e Pistacchio</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-uova" data-it="Uova" data-en="Eggs" data-es="Huevos" data-fr="Oeufs">Uova</span><span class="product-allergen-tag tag-frutta" data-it="Frutta a guscio" data-en="Tree nuts" data-es="Frutos secos" data-fr="Fruits a coque">Frutta a guscio</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Polpettine Fritte</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-uova" data-it="Uova" data-en="Eggs" data-es="Huevos" data-fr="Oeufs">Uova</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Panelle</div><div class="no-allergen modal-no-allergen" data-it="Nessun allergene" data-en="No allergens" data-es="Sin alergenos" data-fr="Sans allergenes">Nessun allergene</div></div>
+                        <div class="product-allergen-card"><div class="name">Patatine Fritte</div><div class="no-allergen modal-no-allergen" data-it="Nessun allergene" data-en="No allergens" data-es="Sin alergenos" data-fr="Sans allergenes">Nessun allergene</div></div>
+                        <div class="product-allergen-card"><div class="name">Burrata e Pomodorini</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Crudo e Bufala</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+
+                        <!-- PASTA -->
+                        <div class="category-header modal-cat-header" data-it="PASTA" data-en="PASTA" data-es="PASTA" data-fr="PATES">PASTA</div>
+                        <div class="product-allergen-card"><div class="name">Carbonara</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-uova" data-it="Uova" data-en="Eggs" data-es="Huevos" data-fr="Oeufs">Uova</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Amatriciana</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Cacio e Pepe</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Dolce Vita</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-frutta" data-it="Frutta a guscio" data-en="Tree nuts" data-es="Frutos secos" data-fr="Fruits a coque">Frutta a guscio</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Ragu</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-sedano" data-it="Sedano" data-en="Celery" data-es="Apio" data-fr="Celeri">Sedano</span></div></div>
+
+                        <!-- INSALATE -->
+                        <div class="category-header modal-cat-header" data-it="INSALATE" data-en="SALADS" data-es="ENSALADAS" data-fr="SALADES">INSALATE</div>
+                        <div class="product-allergen-card"><div class="name">Kung Fu Pollo</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Dillo all'Avocado</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Myss Feta</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Zuppa di Legumi</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-sedano" data-it="Sedano" data-en="Celery" data-es="Apio" data-fr="Celeri">Sedano</span></div></div>
+
+                        <!-- DOLCI -->
+                        <div class="category-header modal-cat-header" data-it="DOLCI" data-en="DESSERTS" data-es="POSTRES" data-fr="DESSERTS">DOLCI</div>
+                        <div class="product-allergen-card"><div class="name">Tortino al Cioccolato</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-uova" data-it="Uova" data-en="Eggs" data-es="Huevos" data-fr="Oeufs">Uova</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Pizza alla Nutella</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-frutta" data-it="Frutta a guscio" data-en="Tree nuts" data-es="Frutos secos" data-fr="Fruits a coque">Frutta a guscio</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Tiramisu</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-uova" data-it="Uova" data-en="Eggs" data-es="Huevos" data-fr="Oeufs">Uova</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Cheesecake</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-glutine" data-it="Glutine" data-en="Gluten" data-es="Gluten" data-fr="Gluten">Glutine</span><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span><span class="product-allergen-tag tag-uova" data-it="Uova" data-en="Eggs" data-es="Huevos" data-fr="Oeufs">Uova</span></div></div>
+                        <div class="product-allergen-card"><div class="name">Gelato Fiordilatte</div><div class="product-allergen-tags"><span class="product-allergen-tag tag-latte" data-it="Latte" data-en="Milk" data-es="Leche" data-fr="Lait">Latte</span></div></div>
+                    </div>
+                </div>
+
+                <!-- Footer Modal -->
+                <div class="text-center text-sm text-gray-600 mt-6 pt-4 border-t border-gray-200">
+                    <strong>FRADIAVOLO</strong> - FRAGESA S.R.L.<br>
+                    <span class="modal-footer-text" data-it="Si invitano i clienti a segnalare al personale qualsiasi intolleranza o allergia." data-en="Customers are invited to inform staff of any intolerance or allergy." data-es="Se invita a los clientes a informar al personal de cualquier intolerancia o alergia." data-fr="Les clients sont invites a signaler au personnel toute intolerance ou allergie.">Si invitano i clienti a segnalare al personale qualsiasi intolleranza o allergia.</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -516,7 +681,76 @@
             document.querySelectorAll('.pasta-disclaimer').forEach(el => {
                 if (el.dataset[lang]) el.textContent = el.dataset[lang];
             });
+
+            // Update allergen CTA section
+            document.querySelectorAll('.allergen-title').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.allergen-desc').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.allergen-cta-btn').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.allergen-staff').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+
+            // Update modal content
+            document.querySelectorAll('.modal-title').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.modal-section-title').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.modal-allergen-name').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.modal-allergen-desc').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.modal-notice-title').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.modal-notice-text').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.modal-impasto-desc').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.modal-footer-text').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+
+            // Update modal product allergen section
+            document.querySelectorAll('.modal-cat-header').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.product-allergen-tag').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.modal-no-allergen').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
         }
+
+        function openAllergenModal() {
+            document.getElementById('allergenModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAllergenModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('allergenModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAllergenModal();
+            }
+        });
 
         function showSection(sectionId) {
             // Hide all sections
